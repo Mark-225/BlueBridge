@@ -4,4 +4,10 @@ subprojects {
     tasks.withType(Jar) {
         destinationDirectory = file("$rootDir/build/target")
     }
+
+    processResources{
+        filesMatching('plugin.yml'){
+            expand([gradleVersion: version])
+        }
+    }
 }

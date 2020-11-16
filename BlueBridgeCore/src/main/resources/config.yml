@@ -1,0 +1,32 @@
+# Number of ticks to wait between every update. The default of 200 means every 10 seconds.
+# Needs to be at least 2 ticks more than the amount of worlds loaded on your server.
+updateInterval: 200
+
+# If this is set to true, all regions will be displayed as markers by default unless their region specific setting is false.
+defaultRender: true
+
+# Set to true if terrain should occlude regions by default. False is highly recommended for the intended purpose of this plugin.
+defaultDepthCheck: false
+
+# If set to true, users must manually activate the markerset(s) in their sidebar before being able to see the regions on the map.
+hideMarkerset: false
+
+# Since regions are usually 3D spaces but bluemap can only display 2D markers, a height to display the region at must be specified.
+# The default of 63 will display regions at sea level.
+renderHeight: 63
+
+# If regions don't have an individual color and outline color set, you can configure the default values here.
+# defaultColor is in RGBA format (AARRGGBB)
+# defaultColor is in RGB format (RRGGBB)
+defaultColor: "960087ff"
+defaultOutlineColor: "0060ff"
+
+# Additionally to addon specific ways to configure these setting for each region individually, you can also configure default values
+# per addon by adding the config values you want to overwrite to the addon's config.yml.
+# (This doesn't work for core plugin settings, like updateInterval)
+# Whenever a marker for a region is created, this will be how the plugin determines which config values to use:
+#
+# Does the Region have an individual setting? -yes--> Use the region's setting.
+# -no--> Does the region's addon have a config value set? -yes--> Use the addon's config value
+#        -no--> Does this config have a config value set? -yes--> Use this config's value
+#               -no--> Use predetermined default values

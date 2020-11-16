@@ -1,0 +1,4 @@
+name: BlueBridgeCore
+main: de.mark225.bluebridge.core.BlueBridgeCore
+version: 1.0
+depend: ["BlueMap", "WorldGuard"]

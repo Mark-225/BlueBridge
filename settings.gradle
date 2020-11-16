@@ -1,0 +1,6 @@
+rootProject.name = 'BlueBridge'
+include ':BlueBridgeCore'
+include ':BlueBridgeWG'
+
+project(':BlueBridgeCore').projectDir = "$rootDir/BlueBridgeCore" as File
+project(':BlueBridgeWG').projectDir = "$rootDir/BlueBridgeWG" as File

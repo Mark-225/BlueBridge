@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8;
+    targetCompatibility = JavaVersion.VERSION_1_8;
+}
+
+group 'de.mark225'
+version '1.0-alpha'
+
+repositories {
+    mavenCentral()
+    maven {url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"}
+    maven { url "https://maven.enginehub.org/repo/" }
+}
+
+dependencies {
+	compile project(':BlueBridgeCore')
+    compileOnly "org.bukkit:bukkit:1.13-R0.1-SNAPSHOT"
+    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.0'
+    compile 'com.flowpowered:flow-math:1.0.3'
+}

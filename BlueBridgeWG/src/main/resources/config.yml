@@ -1,0 +1,54 @@
+# IMPORTANT:
+# This is the addon specific config for BlueBridgeWG! Changes made here will only affect Worldguard regions.
+
+# Markerset display name in the sidebar of Bluemap's webinterface
+markerSetName: "WorldGuard Regions"
+
+# Preset of the html formatted text to be displayed when clicking on a region in Bluemap.
+# Html and CSS are supported.
+# Look up YAML multiline string syntax if you want to use a custom preset.
+#
+# All variable replacements will be sanitized to prevent xss attacks. You can not insert additional html tags using Worldguard flags.
+#
+# The default setting will:
+# - Display the name of the region in the color of its bluemap-color-outline tag
+# - Display the area and volume of the region
+# - Display all (or up to 10) owners and members as two lists next to each other
+#
+# Variables:
+# ${name}: The name / Worldguard id of the region
+# ${name:true}: The Worldguard id of the region, ignores the "bluemap-display" flag
+# ${owners:[delimiter]:([limit])}: a list of all player owner names, separated by the given delimiter. Max size can be configured (optional, default = 10).
+# ${members:[delimiter]:([limit])}: a list of all player members, separated by the given delimiter. Max size can be configured (optional, default = 10).
+# ${size:2d} / ${size:3d}: the size of the region in square or cubic blocks
+# ${flag:flagname}: the value of the given worldguard flag
+htmlPreset: |-
+  <h2 style="color:#${flag:bluemap-color-outline};text-align:center;margin-block-end:0.3em">
+  ${name}
+  </h2>
+  <p style="text-align:center">
+  Area: ${size:2d}<br>Volume: ${size:3d}
+  </p>
+  <div style="display:flex">
+  <div style="flex:50%;padding:10px">
+  <h3 style="margin-block-start:0.3em;margin-block-end:0.3em">
+  Owners
+  </h3>
+  <p>
+  <span>
+  ${owners:<br>}
+  </span>
+  </p>
+  </div>
+  <div style="flex:50%;padding:10px">
+  <h3 style="margin-block-start:0.3em;margin-block-end:0.3em">
+  Members
+  </h3>
+  <p>
+  <span>
+  ${members:<br>}
+  </span>
+  </p>
+  </div>
+  </p>
+

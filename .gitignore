@@ -30,6 +30,3 @@ hs_err_pid*
 build/
 */build/
 
-# Gradle
-.gradle/
-*/.gradle/ 

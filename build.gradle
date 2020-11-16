@@ -1,3 +1,7 @@
 subprojects {
     apply plugin: 'java'
+	
+    tasks.withType(Jar) {
+        destinationDirectory = file("$rootDir/build/target")
+    }
 }

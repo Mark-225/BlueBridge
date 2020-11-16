@@ -7,6 +7,7 @@ buildscript {
     dependencies {
         classpath "com.github.jengelman.gradle.plugins:shadow:6.0.0"
     }
+    
 }
 
 plugins {
@@ -20,8 +21,9 @@ java {
 }
 
 
+
 group 'de.mark225'
-version 'v0.1-alpha'
+version 'v1.0-alpha'
 
 repositories {
     mavenCentral()
@@ -41,7 +43,13 @@ configurations {
     runtime.exclude group: 'com.github.BlueMap-Minecraft'
 }
 tasks.build.dependsOn tasks.shadowJar
+
+jar{
+    archiveClassifier = 'NoDependencies'
+}
+
 shadowJar{
+    archiveClassifier = ''
     dependencies {
         exclude(dependency('com.github.BlueMap-Minecraft:BlueMapAPI:v1.1.0'))
         exclude(dependency('org.bukkit:bukkit:1.13-R0.1-SNAPSHOT'))

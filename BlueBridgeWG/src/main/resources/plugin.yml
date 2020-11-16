@@ -1,4 +1,4 @@
 name: BlueBridgeWG
 main: de.mark225.bluebridge.worldguard.BlueBridgeWG
-version: 0.1
+version: v0.1-alpha
 depend: ["BlueBridgeCore"]

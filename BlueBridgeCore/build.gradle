@@ -11,29 +11,16 @@ buildscript {
 }
 
 plugins {
-    id 'java'
     id "com.github.johnrengelman.shadow" version "6.0.0"
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-
-
-group 'de.mark225'
 version 'v1.0-alpha'
 
 repositories {
-    mavenCentral()
-    maven {url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"}
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    compileOnly "org.bukkit:bukkit:1.13-R0.1-SNAPSHOT"
     implementation 'com.github.BlueMap-Minecraft:BlueMapAPI:v1.1.0'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     compile group: 'org.apache.commons', name: 'commons-text', version: '1.9'

@@ -1,6 +1,21 @@
 subprojects {
     apply plugin: 'java'
-	
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    group 'de.mark225'
+
+    repositories{
+        mavenCentral()
+        maven {url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"}
+    }
+
+    dependencies {
+        compileOnly "org.bukkit:bukkit:1.13-R0.1-SNAPSHOT"
+        compile 'com.flowpowered:flow-math:1.0.3'
+    }
+
     tasks.withType(Jar) {
         destinationDirectory = file("$rootDir/build/target")
     }

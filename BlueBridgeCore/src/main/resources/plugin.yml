@@ -1,4 +1,5 @@
 name: BlueBridgeCore
 main: de.mark225.bluebridge.core.BlueBridgeCore
 version: ${gradleVersion}
+api-version: 1.13
 depend: ["BlueMap", "WorldGuard"]

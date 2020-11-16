@@ -1,4 +1,5 @@
 name: BlueBridgeWG
 main: de.mark225.bluebridge.worldguard.BlueBridgeWG
 version: ${gradleVersion}
+api-version: 1.13
 depend: ["BlueBridgeCore"]

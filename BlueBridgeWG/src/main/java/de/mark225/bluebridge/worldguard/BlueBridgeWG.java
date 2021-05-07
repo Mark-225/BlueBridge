@@ -33,7 +33,7 @@ public class BlueBridgeWG extends JavaPlugin {
     public void updateConfig(){
         saveDefaultConfig();
         reloadConfig();
-        BlueBridgeWGConfig.setConfig(getConfig());
+        new BlueBridgeWGConfig(getConfig());
     }
 
 }

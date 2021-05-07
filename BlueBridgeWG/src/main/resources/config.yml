@@ -25,7 +25,7 @@ defaultExtrude: false
 # ${name:true}: The Worldguard id of the region, ignores the "bluemap-display" flag
 # ${owners:[delimiter]:([limit])}: a list of all player owner names, separated by the given delimiter. Max size can be configured (optional, default = 10).
 # ${members:[delimiter]:([limit])}: a list of all player members, separated by the given delimiter. Max size can be configured (optional, default = 10).
-# ${size:2d} / ${size:3d}: the size of the region in square or cubic blocks
+# ${size:2d} / ${size:3d}: the size of the region in square or cubic blocks (sizes for polygonal regions are only an estimate and can be inaccurate)
 # ${flag:flagname}: the value of the given worldguard flag
 htmlPreset: |-
   <h2 style="color:#${flag:bluemap-color-outline};text-align:center;margin-block-end:0.3em">

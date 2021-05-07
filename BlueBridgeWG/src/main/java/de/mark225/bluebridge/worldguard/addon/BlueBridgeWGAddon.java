@@ -17,12 +17,12 @@ public class BlueBridgeWGAddon implements BlueBridgeAddon {
 
     @Override
     public String markerSetName() {
-        return BlueBridgeWGConfig.markerSetName();
+        return BlueBridgeWGConfig.getInstance().markerSetName();
     }
 
     @Override
     public boolean defaultHide() {
-        return BlueBridgeWGConfig.defaultHideSets();
+        return BlueBridgeWGConfig.getInstance().defaultHideSets();
     }
 
     @Override

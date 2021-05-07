@@ -51,8 +51,8 @@ public class WorldGuardIntegration {
             StateFlag renderFlag = new StateFlag("render-on-bluemap", true);
             StateFlag depthCheckFlag = new StateFlag("bluemap-depth-check", false);
             IntegerFlag heightFlag = new IntegerFlag("bluemap-render-height");
-            StringFlag colorFlag = new StringFlag("bluemap-color", Integer.toHexString(BlueBridgeWGConfig.defaultColor().getRGB()));
-            StringFlag outlineFlag = new StringFlag("bluemap-color-outline", Integer.toHexString(BlueBridgeWGConfig.defaultOutlineColor().getRGB()).substring(2));
+            StringFlag colorFlag = new StringFlag("bluemap-color", Integer.toHexString(BlueBridgeWGConfig.getInstance().defaultColor().getRGB()));
+            StringFlag outlineFlag = new StringFlag("bluemap-color-outline", Integer.toHexString(BlueBridgeWGConfig.getInstance().defaultOutlineColor().getRGB()).substring(2));
             StringFlag displayFlag = new StringFlag("bluemap-display");
             flags.registerAll(Arrays.asList(new Flag[]{renderFlag, heightFlag, colorFlag, outlineFlag, displayFlag}));
             RENDER_FLAG = renderFlag;
@@ -90,7 +90,7 @@ public class WorldGuardIntegration {
             return rm.getRegions().values().stream().filter(pr -> {
                 //filter all regions that shall not be rendered
                 StateFlag.State state = pr.getFlag(RENDER_FLAG);
-                return pr.getPoints().size() >= 3 && (((state == null) && BlueBridgeWGConfig.defaultRender()) || (state == StateFlag.State.ALLOW));
+                return pr.getPoints().size() >= 3 && (((state == null) && BlueBridgeWGConfig.getInstance().defaultRender()) || (state == StateFlag.State.ALLOW));
             }).map(pr -> {
                 //Convert polygon points to Verctor2d List
                 List<Vector2d> points = getPointsForRegion(pr);
@@ -106,27 +106,27 @@ public class WorldGuardIntegration {
                     int rgba = (((((a << 8) + r) << 8) + g) << 8) + b;
                     colorRGBA = new Color(rgba, true);
                 } else {
-                    colorRGBA = BlueBridgeWGConfig.defaultColor();
+                    colorRGBA = BlueBridgeWGConfig.getInstance().defaultColor();
                 }
                 String bordercolor = pr.getFlag(OUTLINE_FLAG);
                 Color colorRGB = null;
                 if (bordercolor != null && hexPatternRGB.matcher(bordercolor).matches()) {
                     colorRGB = new Color(Integer.parseInt(bordercolor, 16), false);
                 } else {
-                    colorRGB = BlueBridgeWGConfig.defaultOutlineColor();
+                    colorRGB = BlueBridgeWGConfig.getInstance().defaultOutlineColor();
                 }
                 StateFlag.State depthCheckVal = pr.getFlag(DEPTH_CHECK_FLAG);
-                boolean depthCheck = depthCheckVal != null ? depthCheckVal == StateFlag.State.ALLOW : BlueBridgeWGConfig.defaultDepthCheck();
+                boolean depthCheck = depthCheckVal != null ? depthCheckVal == StateFlag.State.ALLOW : BlueBridgeWGConfig.getInstance().defaultDepthCheck();
 
                 //create and return new RegionSnapshot
-                return new RegionSnapshot("BlueBridgeWG", pr.getId(), parseHtmlDisplay(pr), worldUUID, pr.getFlag(HEIGHT_FLAG) != null ? pr.getFlag(HEIGHT_FLAG) : BlueBridgeWGConfig.renderHeight(), depthCheck, points, colorRGBA, colorRGB);
+                return new RegionSnapshot("BlueBridgeWG", pr.getId(), parseHtmlDisplay(pr), worldUUID, pr.getFlag(HEIGHT_FLAG) != null ? pr.getFlag(HEIGHT_FLAG) : BlueBridgeWGConfig.getInstance().renderHeight(), depthCheck, points, colorRGBA, colorRGB);
             }).collect(Collectors.toList());
         }
         return Collections.emptyList();
     }
 
     private String parseHtmlDisplay(ProtectedRegion region){
-        return BlueBridgeUtils.replace(new RegionStringLookup(region), BlueBridgeWGConfig.htmlPreset());
+        return BlueBridgeUtils.replace(new RegionStringLookup(region), BlueBridgeWGConfig.getInstance().htmlPreset());
     }
 
     private List<Vector2d> getPointsForRegion(ProtectedRegion region){

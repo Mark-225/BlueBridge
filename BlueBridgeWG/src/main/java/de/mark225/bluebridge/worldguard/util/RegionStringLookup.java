@@ -128,6 +128,8 @@ public class RegionStringLookup extends StringLookupWrapper {
                 BigInteger b2 = BigInteger.valueOf(points.get((i+1) % points.size()).getX()).multiply(BigInteger.valueOf(points.get(i).getZ()));
                 area2D = area2D.add(b1.subtract(b2));
             }
+            area2D = area2D.divide(BigInteger.valueOf(2l));
+            area2D = area2D.abs();
         }
         if(height){
             return area2D.multiply(BigInteger.valueOf(delta.getY())).toString();

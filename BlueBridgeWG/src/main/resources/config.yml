@@ -4,6 +4,11 @@
 # Markerset display name in the sidebar of Bluemap's webinterface
 markerSetName: "WorldGuard Regions"
 
+# Since BluemapAPI 1.5.0, markers can be three-dimensional.
+# If this is set to true, WorldGuard regions will be rendered in 3D at their correct height by default.
+# This setting can be overwritten for individual regions using the WorldGuard flag "bluemap-extrude".
+defaultExtrude: false
+
 # Preset of the html formatted text to be displayed when clicking on a region in Bluemap.
 # Html and CSS are supported.
 # Look up YAML multiline string syntax if you want to use a custom preset.

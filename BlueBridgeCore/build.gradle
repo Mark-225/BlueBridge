@@ -28,6 +28,7 @@ dependencies {
 
 configurations {
     runtime.exclude group: 'com.github.BlueMap-Minecraft'
+    runtime.exclude group: 'com.flowpowered'
 }
 tasks.build.dependsOn tasks.shadowJar
 

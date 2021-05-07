@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.BlueMap-Minecraft:BlueMapAPI:v1.1.0'
+    implementation 'com.github.BlueMap-Minecraft:BlueMapAPI:v1.5.0'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     compile group: 'org.apache.commons', name: 'commons-text', version: '1.9'
 }

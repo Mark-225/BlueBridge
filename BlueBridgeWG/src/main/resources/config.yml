@@ -4,6 +4,11 @@
 # Markerset display name in the sidebar of Bluemap's webinterface
 markerSetName: "WorldGuard Regions"
 
+# Since BluemapAPI 1.5.0, markers can be three-dimensional.
+# If this is set to true, WorldGuard regions will be rendered in 3D at their correct height by default.
+# This setting can be overwritten for individual regions using the WorldGuard flag "bluemap-extrude".
+defaultExtrude: false
+
 # Preset of the html formatted text to be displayed when clicking on a region in Bluemap.
 # Html and CSS are supported.
 # Look up YAML multiline string syntax if you want to use a custom preset.
@@ -20,7 +25,7 @@ markerSetName: "WorldGuard Regions"
 # ${name:true}: The Worldguard id of the region, ignores the "bluemap-display" flag
 # ${owners:[delimiter]:([limit])}: a list of all player owner names, separated by the given delimiter. Max size can be configured (optional, default = 10).
 # ${members:[delimiter]:([limit])}: a list of all player members, separated by the given delimiter. Max size can be configured (optional, default = 10).
-# ${size:2d} / ${size:3d}: the size of the region in square or cubic blocks
+# ${size:2d} / ${size:3d}: the size of the region in square or cubic blocks (sizes for polygonal regions are only an estimate and can be inaccurate)
 # ${flag:flagname}: the value of the given worldguard flag
 htmlPreset: |-
   <h2 style="color:#${flag:bluemap-color-outline};text-align:center;margin-block-end:0.3em">

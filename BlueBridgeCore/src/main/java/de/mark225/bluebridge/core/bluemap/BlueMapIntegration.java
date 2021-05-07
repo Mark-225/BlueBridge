@@ -97,10 +97,18 @@ public class BlueMapIntegration implements BlueMapAPIListener {
     }
 
     private void addToMarkerSet(MarkerSet ms, BlueMapMap map, RegionSnapshot rs, Shape shape, Vector3d pos){
-        ShapeMarker sm = ms.createShapeMarker(getGlobalRegionId(rs.getAddon(), rs.getId(), map.getId(), rs.getWorld().toString()), map, pos, shape, rs.getHeight());
-        sm.setLabel(rs.getName());
-        sm.setColors(rs.getBorderColor(), rs.getColor());
-        sm.setDepthTestEnabled(rs.getDepthCheck());
+        if(rs.isExtrude()){
+            ExtrudeMarker em = ms.createExtrudeMarker(getGlobalRegionId(rs.getAddon(), rs.getId(), map.getId(), rs.getWorld().toString()), map, pos, shape, rs.getHeight(), rs.getUpperHeight());
+            em.setLabel(rs.getName());
+            em.setColors(rs.getBorderColor(), rs.getColor());
+            em.setDepthTestEnabled(rs.getDepthCheck());
+        }else{
+            ShapeMarker sm = ms.createShapeMarker(getGlobalRegionId(rs.getAddon(), rs.getId(), map.getId(), rs.getWorld().toString()), map, pos, shape, rs.getHeight());
+            sm.setLabel(rs.getName());
+            sm.setColors(rs.getBorderColor(), rs.getColor());
+            sm.setDepthTestEnabled(rs.getDepthCheck());
+        }
+
     }
 
     private String getGlobalRegionId(String addon, String region, String mapId, String worldId){

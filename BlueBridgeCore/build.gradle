@@ -14,20 +14,21 @@ plugins {
     id "com.github.johnrengelman.shadow" version "6.0.0"
 }
 
-version 'v1.0-alpha'
+version 'v1.1-alpha'
 
 repositories {
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    implementation 'com.github.BlueMap-Minecraft:BlueMapAPI:v1.1.0'
+    implementation 'com.github.BlueMap-Minecraft:BlueMapAPI:v1.5.0'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     compile group: 'org.apache.commons', name: 'commons-text', version: '1.9'
 }
 
 configurations {
     runtime.exclude group: 'com.github.BlueMap-Minecraft'
+    runtime.exclude group: 'com.flowpowered'
 }
 tasks.build.dependsOn tasks.shadowJar
 

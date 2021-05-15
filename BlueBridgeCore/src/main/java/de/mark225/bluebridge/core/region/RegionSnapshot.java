@@ -14,15 +14,15 @@ public class RegionSnapshot {
     private String id;
     private String htmlDisplay;
     private UUID world;
-    private int height;
+    private float height;
     private boolean extrude;
-    private int upperHeight;
+    private float upperHeight;
     private boolean depthCheck;
     private List<Vector2d> points;
     private Color color;
     private Color borderColor;
 
-    public RegionSnapshot(String addon, String id, String htmlDisplay, UUID world, int height, boolean extrude, int upperHeight, boolean depthCheck, List<Vector2d> points, Color color, Color borderColor) {
+    public RegionSnapshot(String addon, String id, String htmlDisplay, UUID world, float height, boolean extrude, float upperHeight, boolean depthCheck, List<Vector2d> points, Color color, Color borderColor) {
         this.addon = addon;
         this.id = id;
         this.htmlDisplay = htmlDisplay;
@@ -44,7 +44,7 @@ public class RegionSnapshot {
         return id;
     }
 
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 
@@ -52,7 +52,7 @@ public class RegionSnapshot {
         return extrude;
     }
 
-    public int getUpperHeight(){
+    public float getUpperHeight(){
         return upperHeight;
     }
 

@@ -1,0 +1,10 @@
+version 'v1.2-alpha'
+
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    compile project(':BlueBridgeCore')
+    compileOnly 'com.github.TechFortress:GriefPrevention:16.17.1'
+}

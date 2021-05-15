@@ -1,0 +1,5 @@
+name: BlueBridgeGP
+main: de.mark225.bluebridge.griefprevention.BlueBridgeGP
+version: ${gradleVersion}
+api-version: 1.13
+depend: ["BlueBridgeCore", "GriefPrevention"]

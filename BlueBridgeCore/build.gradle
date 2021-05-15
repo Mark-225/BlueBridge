@@ -14,7 +14,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "6.0.0"
 }
 
-version 'v1.1-alpha'
+version 'v1.2-alpha'
 
 repositories {
     maven { url 'https://jitpack.io' }

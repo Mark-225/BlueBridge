@@ -35,6 +35,14 @@ public class BlueBridgeConfig {
         return config.getInt("renderHeight", 63);
     }
 
+    public static double minDistance(){
+        return config.getDouble("minDistance", 10.0);
+    }
+
+    public static double maxDistance(){
+        return config.getDouble("maxDistance", 500.0);
+    }
+
     public static Color defaultColor(){
         String rgba = config.getString("defaultColor", "960087ff");
         if(!rgbaRegex.matcher(rgba).matches())

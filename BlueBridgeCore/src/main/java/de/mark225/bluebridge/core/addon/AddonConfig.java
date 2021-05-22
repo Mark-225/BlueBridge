@@ -30,6 +30,14 @@ public abstract class AddonConfig {
         return config.getInt("renderHeight", BlueBridgeConfig.renderHeight());
     }
 
+    public double minDistance() {
+        return config.getDouble("minDistance", BlueBridgeConfig.minDistance());
+    }
+
+    public double maxDistance() {
+        return config.getDouble("maxDistance", BlueBridgeConfig.maxDistance());
+    }
+
     public Color defaultColor(){
         String rgba = config.getString("defaultColor", "");
         if(!rgbaRegex.matcher(rgba).matches())

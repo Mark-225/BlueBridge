@@ -21,8 +21,10 @@ public class RegionSnapshot {
     private List<Vector2d> points;
     private Color color;
     private Color borderColor;
+    private double minDistance;
+    private double maxDistance;
 
-    public RegionSnapshot(String addon, String id, String htmlDisplay, UUID world, float height, boolean extrude, float upperHeight, boolean depthCheck, List<Vector2d> points, Color color, Color borderColor) {
+    public RegionSnapshot(String addon, String id, String htmlDisplay, UUID world, float height, boolean extrude, float upperHeight, boolean depthCheck, List<Vector2d> points, Color color, Color borderColor, double minDistance, double maxDistance) {
         this.addon = addon;
         this.id = id;
         this.htmlDisplay = htmlDisplay;
@@ -34,6 +36,8 @@ public class RegionSnapshot {
         this.points = points;
         this.color = color;
         this.borderColor = borderColor;
+        this.minDistance = minDistance;
+        this.maxDistance = maxDistance;
     }
 
     public String getAddon(){
@@ -80,6 +84,14 @@ public class RegionSnapshot {
         return borderColor;
     }
 
+    public double getMinDistance() {
+        return minDistance;
+    }
+
+    public double getMaxDistance() {
+        return maxDistance;
+    }
+
     @Override
     public boolean equals(Object other){
         if(other == this)
@@ -96,6 +108,8 @@ public class RegionSnapshot {
                 snap.getWorld().equals(this.getWorld()) &&
                 (snap.getName() != null ? snap.getName().equals(this.getName()) : this.getName() == null) &&
                 snap.getHeight() == this.getHeight() &&
+                snap.getMinDistance() == this.getMinDistance() &&
+                snap.getMaxDistance() == this.getMaxDistance() &&
                 snap.getDepthCheck() == this.getDepthCheck() &&
                 snap.getPoints().equals(this.getPoints());
     }

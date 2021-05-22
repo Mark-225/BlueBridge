@@ -77,7 +77,9 @@ public class GriefPreventionIntegration{
                 BlueBridgeGPConfig.getInstance().defaultDepthCheck(),
                 points,
                 fillColor,
-                borderColor);
+                borderColor,
+                BlueBridgeGPConfig.getInstance().minDistance(),
+                BlueBridgeGPConfig.getInstance().maxDistance());
         claims.put(claim.getID(), rs);
     }
 

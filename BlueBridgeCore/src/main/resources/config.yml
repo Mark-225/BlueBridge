@@ -16,8 +16,9 @@ hideMarkerset: false
 renderHeight: 63
 
 # Define regions visibility interval. May help servers with lots of markers.
-minDistance: 10.0
-maxDistance: 500.0
+# Negative values, also the default ones, make distance unlimited (as configured by default in BlueMap).
+minDistance: -1
+maxDistance: -1
 
 # If regions don't have an individual color and outline color set, you can configure the default values here.
 # defaultColor is in RGBA format (AARRGGBB)

@@ -102,17 +102,27 @@ public class BlueMapIntegration implements BlueMapAPIListener {
             em.setLabel(rs.getName());
             em.setColors(rs.getBorderColor(), rs.getColor());
             em.setDepthTestEnabled(rs.getDepthCheck());
-            em.setMinDistance(rs.getMinDistance());
-            em.setMaxDistance(rs.getMaxDistance());
+            defineDistances(em, rs);
         }else{
             ShapeMarker sm = ms.createShapeMarker(getGlobalRegionId(rs.getAddon(), rs.getId(), map.getId(), rs.getWorld().toString()), map, pos, shape, rs.getHeight());
             sm.setLabel(rs.getName());
             sm.setColors(rs.getBorderColor(), rs.getColor());
             sm.setDepthTestEnabled(rs.getDepthCheck());
-            sm.setMinDistance(rs.getMinDistance());
-            sm.setMaxDistance(rs.getMaxDistance());
+            defineDistances(sm, rs);
         }
 
+    }
+
+    private void defineDistances(DistanceRangedMarker dmr, RegionSnapshot rs) {
+        final double minDistance = rs.getMinDistance();
+        final double maxDistance = rs.getMaxDistance();
+
+        if (minDistance >= 0) {
+            dmr.setMinDistance(minDistance);
+        }
+        if (maxDistance > 0 && maxDistance > minDistance) {
+            dmr.setMaxDistance(maxDistance);
+        }
     }
 
     private String getGlobalRegionId(String addon, String region, String mapId, String worldId){

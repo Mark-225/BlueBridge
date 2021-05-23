@@ -1,5 +1,5 @@
 # BlueBridge
-BlueBridge is a modular bridge plugin for Bukkit (or Spigot/Paper) servers with the aim to bring multiple minecraft region plugins to BlueMap (Currently, only WorldGuard is supported but more addons are on their way).
+BlueBridge is a modular bridge plugin for Bukkit (or Spigot/Paper) servers with the aim to bring multiple minecraft region plugins to BlueMap (Currently, WorldGuard and GriefPrevention are supported but there's always more on its way and the issues are open for ideas and suggestions).
 
 # How to use
 Install BlueBridgeCore and the addons you need just like any other plugin, configure them to fit your needs and you are ready to go!

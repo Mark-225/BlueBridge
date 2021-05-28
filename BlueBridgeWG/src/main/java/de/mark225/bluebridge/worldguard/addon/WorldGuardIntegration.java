@@ -17,6 +17,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
+import de.mark225.bluebridge.core.region.RegionSnapshotBuilder;
 import de.mark225.bluebridge.core.util.BlueBridgeUtils;
 import de.mark225.bluebridge.worldguard.BlueBridgeWG;
 import de.mark225.bluebridge.worldguard.config.BlueBridgeWGConfig;
@@ -127,7 +128,16 @@ public class WorldGuardIntegration {
                 int height = pr.getFlag(HEIGHT_FLAG) != null ? pr.getFlag(HEIGHT_FLAG) : BlueBridgeWGConfig.getInstance().renderHeight();
 
                 //create and return new RegionSnapshot
-                return new RegionSnapshot("BlueBridgeWG", pr.getId(), parseHtmlDisplay(pr), worldUUID, extrude ? pr.getMinimumPoint().getBlockY() : height, extrude, pr.getMaximumPoint().getBlockY() +1, depthCheck, points, colorRGBA, colorRGB, BlueBridgeWGConfig.getInstance().minDistance(), BlueBridgeWGConfig.getInstance().maxDistance());
+
+                return new RegionSnapshotBuilder(BlueBridgeWG.getInstance().getAddon(), pr.getId(), points, worldUUID)
+                        .setHtmlDisplay(parseHtmlDisplay(pr))
+                        .setHeight(extrude ? pr.getMinimumPoint().getBlockY() : height)
+                        .setExtrude(extrude)
+                        .setUpperHeight(pr.getMaximumPoint().getBlockY() +1)
+                        .setDepthCheck(depthCheck)
+                        .setColor(colorRGBA)
+                        .setBorderColor(colorRGB)
+                        .build();
             }).collect(Collectors.toList());
         }
         return Collections.emptyList();

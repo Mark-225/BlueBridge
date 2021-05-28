@@ -25,6 +25,13 @@ public class RegionSnapshot {
     private double minDistance;
     private double maxDistance;
 
+    public RegionSnapshot(String addon, String id, List<Vector2d> points, UUID world){
+        this.addon = addon;
+        this.id = id;
+        this.points = points;
+        this.world = world;
+    }
+
     public RegionSnapshot(String addon, String id, String htmlDisplay, UUID world, float height, boolean extrude, float upperHeight, boolean depthCheck, List<Vector2d> points, Color color, Color borderColor, double minDistance, double maxDistance) {
         this.addon = addon;
         this.id = id;
@@ -91,6 +98,42 @@ public class RegionSnapshot {
 
     public double getMaxDistance() {
         return maxDistance;
+    }
+
+    public void setHtmlDisplay(String htmlDisplay) {
+        this.htmlDisplay = htmlDisplay;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public void setExtrude(boolean extrude) {
+        this.extrude = extrude;
+    }
+
+    public void setUpperHeight(float upperHeight) {
+        this.upperHeight = upperHeight;
+    }
+
+    public void setDepthCheck(boolean depthCheck) {
+        this.depthCheck = depthCheck;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public void setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+    }
+
+    public void setMinDistance(double minDistance) {
+        this.minDistance = minDistance;
+    }
+
+    public void setMaxDistance(double maxDistance) {
+        this.maxDistance = maxDistance;
     }
 
     @Override

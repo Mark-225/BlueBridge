@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public interface BlueBridgeAddon {
     public String name();
+    public AddonConfig addonConfig();
     public String markerSetName();
     public boolean defaultHide();
     public Collection<RegionSnapshot> fetchSnapshots(UUID world);

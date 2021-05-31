@@ -19,6 +19,10 @@ public class BlueBridgeGP extends JavaPlugin {
         return integration;
     }
 
+    public BlueBridgeGPAddon getAddon(){
+        return addon;
+    }
+
     @Override
     public void onLoad(){
         instance = this;

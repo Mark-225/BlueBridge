@@ -2,6 +2,7 @@ package de.mark225.bluebridge.griefprevention.addon;
 
 import com.flowpowered.math.vector.Vector2d;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
+import de.mark225.bluebridge.core.region.RegionSnapshotBuilder;
 import de.mark225.bluebridge.griefprevention.BlueBridgeGP;
 import de.mark225.bluebridge.griefprevention.addon.listener.GriefPreventionListener;
 import de.mark225.bluebridge.griefprevention.config.BlueBridgeGPConfig;
@@ -67,19 +68,14 @@ public class GriefPreventionIntegration{
         Color borderColor = claim.isAdminClaim() ? BlueBridgeGPConfig.getInstance().adminOutlineColor() : BlueBridgeGPConfig.getInstance().defaultOutlineColor();
         Color fillColor = claim.isAdminClaim() ? BlueBridgeGPConfig.getInstance().adminFillColor() : BlueBridgeGPConfig.getInstance().defaultColor();
 
-        RegionSnapshot rs = new RegionSnapshot("BlueBridgeGP",
-                claim.getID().toString(),
-                label,
-                claim.getLesserBoundaryCorner().getWorld().getUID(),
-                extrude ? claimFloor : (float) BlueBridgeGPConfig.getInstance().renderHeight() + heightModifier,
-                extrude,
-                claimCeiling,
-                BlueBridgeGPConfig.getInstance().defaultDepthCheck(),
-                points,
-                fillColor,
-                borderColor,
-                BlueBridgeGPConfig.getInstance().minDistance(),
-                BlueBridgeGPConfig.getInstance().maxDistance());
+        RegionSnapshot rs = new RegionSnapshotBuilder(BlueBridgeGP.getInstance().getAddon(), claim.getID().toString(), points, claim.getLesserBoundaryCorner().getWorld().getUID())
+                .setHtmlDisplay(label)
+                .setHeight(extrude ? claimFloor : (float) BlueBridgeGPConfig.getInstance().renderHeight() + heightModifier)
+                .setExtrude(extrude)
+                .setUpperHeight(claimCeiling)
+                .setColor(fillColor)
+                .setBorderColor(borderColor)
+                .build();
         claims.put(claim.getID(), rs);
     }
 

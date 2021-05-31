@@ -3,6 +3,9 @@ subprojects {
 
     version 'v1.2.1-alpha'
 
+    //Contributors are added to this list in the order of their first contribution. Separate using a comma and space.
+    def authors = 'Mark_225, Aurelien30000'
+
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
@@ -24,7 +27,7 @@ subprojects {
 
     processResources{
         filesMatching('plugin.yml'){
-            expand([gradleVersion: version])
+            expand([gradleVersion: version, contributors: authors])
         }
     }
 }

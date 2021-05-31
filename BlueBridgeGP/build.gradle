@@ -1,5 +1,3 @@
-version 'v1.2.1-alpha'
-
 repositories {
     maven { url "https://jitpack.io" }
 }

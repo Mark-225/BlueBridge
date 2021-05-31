@@ -127,7 +127,7 @@ public class WorldGuardIntegration {
                 int height = pr.getFlag(HEIGHT_FLAG) != null ? pr.getFlag(HEIGHT_FLAG) : BlueBridgeWGConfig.getInstance().renderHeight();
 
                 //create and return new RegionSnapshot
-                return new RegionSnapshot("BlueBridgeWG", pr.getId(), parseHtmlDisplay(pr), worldUUID, extrude ? pr.getMinimumPoint().getBlockY() : height, extrude, pr.getMaximumPoint().getBlockY() +1, depthCheck, points, colorRGBA, colorRGB);
+                return new RegionSnapshot("BlueBridgeWG", pr.getId(), parseHtmlDisplay(pr), worldUUID, extrude ? pr.getMinimumPoint().getBlockY() : height, extrude, pr.getMaximumPoint().getBlockY() +1, depthCheck, points, colorRGBA, colorRGB, BlueBridgeWGConfig.getInstance().minDistance(), BlueBridgeWGConfig.getInstance().maxDistance());
             }).collect(Collectors.toList());
         }
         return Collections.emptyList();

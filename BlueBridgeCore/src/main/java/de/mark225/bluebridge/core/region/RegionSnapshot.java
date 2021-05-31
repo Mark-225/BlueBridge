@@ -4,6 +4,7 @@ import com.flowpowered.math.vector.Vector2d;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -21,8 +22,10 @@ public class RegionSnapshot {
     private List<Vector2d> points;
     private Color color;
     private Color borderColor;
+    private double minDistance;
+    private double maxDistance;
 
-    public RegionSnapshot(String addon, String id, String htmlDisplay, UUID world, float height, boolean extrude, float upperHeight, boolean depthCheck, List<Vector2d> points, Color color, Color borderColor) {
+    public RegionSnapshot(String addon, String id, String htmlDisplay, UUID world, float height, boolean extrude, float upperHeight, boolean depthCheck, List<Vector2d> points, Color color, Color borderColor, double minDistance, double maxDistance) {
         this.addon = addon;
         this.id = id;
         this.htmlDisplay = htmlDisplay;
@@ -34,6 +37,8 @@ public class RegionSnapshot {
         this.points = points;
         this.color = color;
         this.borderColor = borderColor;
+        this.minDistance = minDistance;
+        this.maxDistance = maxDistance;
     }
 
     public String getAddon(){
@@ -80,24 +85,32 @@ public class RegionSnapshot {
         return borderColor;
     }
 
+    public double getMinDistance() {
+        return minDistance;
+    }
+
+    public double getMaxDistance() {
+        return maxDistance;
+    }
+
     @Override
-    public boolean equals(Object other){
-        if(other == this)
-            return true;
-        if(other == null)
-            return false;
-        if(!(other instanceof RegionSnapshot))
-            return false;
-        RegionSnapshot snap = (RegionSnapshot) other;
-        return snap.getAddon().equals(this.getAddon()) &&
-                snap.getId().equals(this.getId()) &&
-                snap.getBorderColor().equals(this.getBorderColor()) &&
-                snap.getColor().equals(this.getColor()) &&
-                snap.getWorld().equals(this.getWorld()) &&
-                (snap.getName() != null ? snap.getName().equals(this.getName()) : this.getName() == null) &&
-                snap.getHeight() == this.getHeight() &&
-                snap.getDepthCheck() == this.getDepthCheck() &&
-                snap.getPoints().equals(this.getPoints());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RegionSnapshot)) return false;
+        RegionSnapshot that = (RegionSnapshot) o;
+        return Float.compare(that.getHeight(), getHeight()) == 0 &&
+                isExtrude() == that.isExtrude() &&
+                Float.compare(that.getUpperHeight(), getUpperHeight()) == 0 &&
+                getDepthCheck() == that.getDepthCheck() &&
+                Double.compare(that.getMinDistance(), getMinDistance()) == 0 &&
+                Double.compare(that.getMaxDistance(), getMaxDistance()) == 0 &&
+                getAddon().equals(that.getAddon()) &&
+                getId().equals(that.getId()) &&
+                htmlDisplay.equals(that.htmlDisplay) &&
+                getWorld().equals(that.getWorld()) &&
+                getPoints().equals(that.getPoints()) &&
+                getColor().equals(that.getColor()) &&
+                getBorderColor().equals(that.getBorderColor());
     }
 
     public boolean refersSameRegion(RegionSnapshot other){

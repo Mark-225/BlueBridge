@@ -1,5 +1,6 @@
 package de.mark225.bluebridge.griefprevention.addon;
 
+import de.mark225.bluebridge.core.addon.AddonConfig;
 import de.mark225.bluebridge.core.addon.BlueBridgeAddon;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
 import de.mark225.bluebridge.griefprevention.BlueBridgeGP;
@@ -13,6 +14,11 @@ public class BlueBridgeGPAddon implements BlueBridgeAddon {
     @Override
     public String name() {
         return "BlueBridgeGP";
+    }
+
+    @Override
+    public AddonConfig addonConfig() {
+        return BlueBridgeGPConfig.getInstance();
     }
 
     @Override

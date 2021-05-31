@@ -1,5 +1,7 @@
 name: BlueBridgeCore
 main: de.mark225.bluebridge.core.BlueBridgeCore
 version: ${gradleVersion}
+authors: [${contributors}]
+website: https://github.com/Mark-225/BlueBridge
 api-version: 1.13
 depend: ["BlueMap"]

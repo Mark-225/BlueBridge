@@ -20,6 +20,10 @@ public class BlueBridgeWG extends JavaPlugin {
         return integration;
     }
 
+    public BlueBridgeWGAddon getAddon(){
+        return addon;
+    }
+
     @Override
     public void onLoad(){
         instance = this;

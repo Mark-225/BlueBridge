@@ -1,5 +1,6 @@
 package de.mark225.bluebridge.worldguard.addon;
 
+import de.mark225.bluebridge.core.addon.AddonConfig;
 import de.mark225.bluebridge.core.addon.BlueBridgeAddon;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
 import de.mark225.bluebridge.worldguard.BlueBridgeWG;
@@ -13,6 +14,11 @@ public class BlueBridgeWGAddon implements BlueBridgeAddon {
     @Override
     public String name() {
         return "BlueBridgeWG";
+    }
+
+    @Override
+    public AddonConfig addonConfig() {
+        return BlueBridgeWGConfig.getInstance();
     }
 
     @Override

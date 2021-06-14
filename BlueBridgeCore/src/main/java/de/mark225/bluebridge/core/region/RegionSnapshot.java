@@ -164,4 +164,10 @@ public class RegionSnapshot {
         return other.getAddon().equals(this.getAddon()) && other.getId().equals(this.getId());
     }
 
+    public enum State{
+        UNCHANGED,
+        CHANGED_OR_ADDED,
+        DELETED
+    }
+
 }

@@ -51,15 +51,12 @@ public class BlueBridgeCore extends JavaPlugin {
     public void startUpdateTask(){
         if(updateTask == null){
             updateTask = new UpdateTask();
-            updateTask.runTaskTimer(this, 1, BlueBridgeConfig.updateInterval());
+            updateTask.runTask(this);
         }
     }
 
     public void stopUpdateTask(){
-        if(updateTask != null){
-            Bukkit.getScheduler().cancelTask(updateTask.getTaskId());
-            updateTask = null;
-        }
+
     }
 
     public BlueMapIntegration getBlueMapIntegration(){

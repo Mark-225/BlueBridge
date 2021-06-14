@@ -4,12 +4,14 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 public class AddonRegistry {
-    private static List<BlueBridgeAddon> registeredAddons;
+    private static CopyOnWriteArrayList<BlueBridgeAddon> registeredAddons;
 
     public static void clear(){
-        registeredAddons = new ArrayList<>();
+        registeredAddons.clear();
     }
 
     public static void register(BlueBridgeAddon addon){
@@ -28,6 +30,10 @@ public class AddonRegistry {
                 return addon;
         }
         return null;
+    }
+
+    public static List<BlueBridgeAddon> getIfActive(boolean active){
+        return registeredAddons.stream().filter(addon -> active == addon.isActiveAddon()).collect(Collectors.toList());
     }
 
 

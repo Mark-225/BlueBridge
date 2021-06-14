@@ -22,11 +22,11 @@ public class BlueBridgeWGConfig extends AddonConfig {
         init(config);
     }
 
-    public String htmlPreset(){
+    public synchronized String htmlPreset(){
         return config.getString("htmlPreset", "$(name)");
     }
 
-    public boolean defaultExtrude(){
+    public synchronized boolean defaultExtrude(){
         return config.getBoolean("defaultExtrude", false);
     }
 

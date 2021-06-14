@@ -26,6 +26,7 @@ public class BlueMapIntegration implements BlueMapAPIListener {
             BlueBridgeCore.getInstance().updateConfig();
             BlueBridgeCore.getInstance().reloadAddons();
             resetMarkers();
+
             BlueBridgeCore.getInstance().startUpdateTask();
         });
     }

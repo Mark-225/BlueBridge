@@ -6,11 +6,12 @@ import de.mark225.bluebridge.core.region.RegionSnapshot;
 import de.mark225.bluebridge.worldguard.BlueBridgeWG;
 import de.mark225.bluebridge.worldguard.config.BlueBridgeWGConfig;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
-public class BlueBridgeWGAddon implements BlueBridgeAddon {
+public class BlueBridgeWGAddon extends BlueBridgeAddon {
     @Override
     public String name() {
         return "BlueBridgeWG";
@@ -32,16 +33,21 @@ public class BlueBridgeWGAddon implements BlueBridgeAddon {
     }
 
     @Override
-    public Collection<RegionSnapshot> fetchSnapshots(UUID world) {
+    public ConcurrentMap<String, RegionSnapshot> fetchSnapshots(UUID world) {
         WorldGuardIntegration integration = BlueBridgeWG.getInstance().getWGIntegration();
         if(integration != null){
-            return integration.getAllRegions(world);
+            return integration.getAllRegions(world).stream().collect(Collectors.toConcurrentMap(RegionSnapshot::getId, rs -> rs));
         }
-        return Collections.emptyList();
+        return new ConcurrentHashMap<>();
     }
 
     @Override
     public void reload() {
         BlueBridgeWG.getInstance().updateConfig();
+    }
+
+    @Override
+    public boolean isActiveAddon() {
+        return false;
     }
 }

@@ -5,68 +5,95 @@ import de.mark225.bluebridge.core.BlueBridgeCore;
 import de.mark225.bluebridge.core.addon.AddonRegistry;
 import de.mark225.bluebridge.core.addon.BlueBridgeAddon;
 import de.mark225.bluebridge.core.bluemap.BlueMapIntegration;
+import de.mark225.bluebridge.core.config.BlueBridgeConfig;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class UpdateTask extends BukkitRunnable {
 
-    List<RegionSnapshot> lastSnapshots = new ArrayList<>();
+    public static CopyOnWriteArrayList<UUID> worlds;
+
+    ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> lastSnapshots = new ConcurrentHashMap<>();
 
     @Override
     public void run() {
-
-        List<RegionSnapshot> currentUpdate = new ArrayList<>();
-
-        //Schedule one task per World to fetch all regions
-        int tickDelay = 0;
-        for(World w : Bukkit.getWorlds()){
-            new BukkitRunnable(){
+        List<BukkitRunnable> tasks = new CopyOnWriteArrayList<>();
+        List<BlueBridgeAddon> addons = AddonRegistry.getIfActive(false);
+        ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> newSnapshots = new ConcurrentHashMap<>();
+        for(UUID world : worlds){
+            tasks.add(new BukkitRunnable() {
                 @Override
                 public void run() {
-                    for(BlueBridgeAddon addon : AddonRegistry.getAddons()){
-                        currentUpdate.addAll(addon.fetchSnapshots(w.getUID()));
+                    for(BlueBridgeAddon addon : addons){
+                        newSnapshots.put(addon.name(), addon.fetchSnapshots(world));
                     }
+                    tasks.remove(this);
+                    if(tasks.isEmpty())
+                        doUpdate(newSnapshots);
                 }
-            }.runTaskLater(BlueBridgeCore.getInstance(), tickDelay++);
+            });
         }
-
-        //Schedule task one tick after fetch tasks are completed
-        new BukkitRunnable(){
-
-            @Override
-            public void run() {
-                List<RegionSnapshot> lastUpdate = lastSnapshots;
-                lastSnapshots = new ArrayList<>(currentUpdate);
-                async(lastUpdate, currentUpdate);
-            }
-        }.runTaskLater(BlueBridgeCore.getInstance(), tickDelay);
-
+        for(BukkitRunnable task : tasks){
+            task.runTaskAsynchronously(BlueBridgeCore.getInstance());
+        }
     }
 
-    private void async(List<RegionSnapshot> last, List<RegionSnapshot> current){
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                List<RegionSnapshot> changedOrAdded = current.stream().filter(rs -> !last.contains(rs)).collect(Collectors.toList());
-                List<RegionSnapshot> removed = last.stream().filter(rs -> current.stream().noneMatch(rscur -> rs.refersSameRegion(rscur))).collect(Collectors.toList());
-                BlueMapIntegration bmi = BlueBridgeCore.getInstance().getBlueMapIntegration();
-                MarkerAPI markers = bmi.loadMarkerAPI();
-                bmi.addOrUpdate(changedOrAdded, markers);
-                bmi.remove(removed, markers);
-                try {
-                    markers.save();
-                } catch (IOException e) {
-                    e.printStackTrace();
+    private void doUpdate(ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> newSnapshots){
+        List<RegionSnapshot> addedOrUpdated = new ArrayList<>();
+        List<RegionSnapshot> removed = new ArrayList<>();
+        newSnapshots.forEach((addon, regionMap) ->{
+            ConcurrentMap<String, RegionSnapshot> lr = lastSnapshots.get(addon);
+            if(lr == null)
+                lr = new ConcurrentHashMap<>();
+
+            final ConcurrentMap<String, RegionSnapshot> lastRegionMap = lr;
+
+            List<RegionSnapshot> unchangedOrUpdated = new ArrayList<>();
+            lastRegionMap.forEach((oldKey, region) ->{
+                if(!regionMap.containsKey(oldKey)){
+                    removed.add(region);
                 }
+            });
+            regionMap.forEach((key, region) ->{
+                if(!lastRegionMap.containsKey(key)){
+                    addedOrUpdated.add(region);
+                }else{
+                    unchangedOrUpdated.add(region);
+                }
+            });
+            for(RegionSnapshot rs : unchangedOrUpdated){
+                if(!lastRegionMap.containsValue(rs))
+                    addedOrUpdated.add(rs);
             }
-        }.runTaskAsynchronously(BlueBridgeCore.getInstance());
+        });
+        BlueMapIntegration integration = BlueBridgeCore.getInstance().getBlueMapIntegration();
+        MarkerAPI api = integration.loadMarkerAPI();
+        integration.addOrUpdate(addedOrUpdated, api);
+        integration.remove(removed, api);
+        try {
+            api.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        lastSnapshots = newSnapshots;
+        reschedule();
+    }
+
+    public void reschedule(){
+        this.runTaskLater(BlueBridgeCore.getInstance(), BlueBridgeConfig.updateInterval());
     }
 
 

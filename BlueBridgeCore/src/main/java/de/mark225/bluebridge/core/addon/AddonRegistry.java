@@ -8,7 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class AddonRegistry {
-    private static CopyOnWriteArrayList<BlueBridgeAddon> registeredAddons;
+    private static CopyOnWriteArrayList<BlueBridgeAddon> registeredAddons = new CopyOnWriteArrayList<>();
 
     public static void clear(){
         registeredAddons.clear();

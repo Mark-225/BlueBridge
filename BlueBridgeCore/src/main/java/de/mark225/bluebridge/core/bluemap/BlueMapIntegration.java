@@ -5,15 +5,18 @@ import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapAPIListener;
 import de.bluecolored.bluemap.api.BlueMapMap;
+import de.bluecolored.bluemap.api.BlueMapWorld;
 import de.bluecolored.bluemap.api.marker.*;
 import de.mark225.bluebridge.core.BlueBridgeCore;
 import de.mark225.bluebridge.core.addon.AddonRegistry;
 import de.mark225.bluebridge.core.addon.BlueBridgeAddon;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
+import de.mark225.bluebridge.core.update.UpdateTask;
 import org.bukkit.Bukkit;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BlueMapIntegration implements BlueMapAPIListener {
 
@@ -26,7 +29,8 @@ public class BlueMapIntegration implements BlueMapAPIListener {
             BlueBridgeCore.getInstance().updateConfig();
             BlueBridgeCore.getInstance().reloadAddons();
             resetMarkers();
-
+            UpdateTask.worlds.clear();
+            UpdateTask.worlds.addAll(blueMapAPI.getWorlds().stream().map(BlueMapWorld::getUuid).collect(Collectors.toList()));
             BlueBridgeCore.getInstance().startUpdateTask();
         });
     }

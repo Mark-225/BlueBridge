@@ -24,9 +24,28 @@ import java.util.stream.Collectors;
 
 public class UpdateTask extends BukkitRunnable {
 
-    public static CopyOnWriteArrayList<UUID> worlds;
+    public static CopyOnWriteArrayList<UUID> worlds = new CopyOnWriteArrayList<>();
 
-    ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> lastSnapshots = new ConcurrentHashMap<>();
+    private static ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> lastSnapshots = new ConcurrentHashMap<>();
+
+    private static UpdateTask currentTask;
+
+    private static boolean locked = true;
+
+    public static synchronized void createAndSchedule(boolean instant){
+        if(currentTask == null && !locked){
+            currentTask = new UpdateTask();
+            currentTask.runTaskLater(BlueBridgeCore.getInstance(), instant ? 0L : BlueBridgeConfig.updateInterval());
+        }
+    }
+
+    public static synchronized void setLocked(boolean locked){
+        UpdateTask.locked = locked;
+    }
+
+    private UpdateTask(){
+
+    }
 
     @Override
     public void run() {
@@ -92,9 +111,9 @@ public class UpdateTask extends BukkitRunnable {
         reschedule();
     }
 
-    public void reschedule(){
-        this.runTaskLater(BlueBridgeCore.getInstance(), BlueBridgeConfig.updateInterval());
+    public synchronized void reschedule(){
+        currentTask = null;
+        BlueBridgeCore.getInstance().reschedule();
     }
-
 
 }

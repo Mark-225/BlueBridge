@@ -3,6 +3,6 @@ repositories {
 }
 
 dependencies {
-	compile project(':BlueBridgeCore')
-    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.0'
+    implementation project(':BlueBridgeCore')
+    implementation 'com.sk89q.worldguard:worldguard-bukkit:7.0.0'
 }

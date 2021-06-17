@@ -19,5 +19,4 @@ public abstract class BlueBridgeAddon {
     public abstract ConcurrentMap<String, RegionSnapshot> fetchSnapshots(UUID world);
     public abstract void reload();
     public abstract boolean isActiveAddon();
-    public void registerActiveEvents(Consumer<RegionSnapshot> onAddOrUpdate, Consumer<RegionSnapshot> onDelete){}
 }

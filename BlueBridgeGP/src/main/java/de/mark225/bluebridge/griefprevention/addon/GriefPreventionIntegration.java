@@ -1,6 +1,7 @@
 package de.mark225.bluebridge.griefprevention.addon;
 
 import com.flowpowered.math.vector.Vector2d;
+import de.mark225.bluebridge.core.addon.ActiveAddonEventHandler;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
 import de.mark225.bluebridge.core.region.RegionSnapshotBuilder;
 import de.mark225.bluebridge.griefprevention.BlueBridgeGP;
@@ -12,30 +13,18 @@ import me.ryanhamshire.GriefPrevention.util.BoundingBox;
 import org.bukkit.Bukkit;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GriefPreventionIntegration{
 
-    private HashMap<Long, RegionSnapshot> claims = new HashMap<>();
-
     public void init(){
-        addExistingClaims();
         Bukkit.getPluginManager().registerEvents(new GriefPreventionListener(), BlueBridgeGP.getInstance());
     }
 
-    public void reload(){
-        resetClaims();
-        addExistingClaims();
-    }
-
-    public HashMap<Long, RegionSnapshot> getClaims(){
-        return claims;
-    }
-
     public void addOrUpdateClaim(Claim claim){
-        //First, schedule updates for all child claims
+        //Schedule updates for all child claims
         if(claim.children != null && !claim.children.isEmpty()){
             for(Claim child : claim.children){
                 Bukkit.getScheduler().runTaskLater(BlueBridgeGP.getInstance(), () ->{
@@ -44,6 +33,10 @@ public class GriefPreventionIntegration{
             }
         }
 
+        ActiveAddonEventHandler.addOrUpdate(convertClaim(claim));
+    }
+
+    private RegionSnapshot convertClaim(Claim claim){
         //Figure out claim depth (how many layers of parents are above this claim)
         int layer = 0;
         Claim currentClaim = claim;
@@ -68,7 +61,7 @@ public class GriefPreventionIntegration{
         Color borderColor = claim.isAdminClaim() ? BlueBridgeGPConfig.getInstance().adminOutlineColor() : BlueBridgeGPConfig.getInstance().defaultOutlineColor();
         Color fillColor = claim.isAdminClaim() ? BlueBridgeGPConfig.getInstance().adminFillColor() : BlueBridgeGPConfig.getInstance().defaultColor();
 
-        RegionSnapshot rs = new RegionSnapshotBuilder(BlueBridgeGP.getInstance().getAddon(), claim.getID().toString(), points, claim.getLesserBoundaryCorner().getWorld().getUID())
+        return new RegionSnapshotBuilder(BlueBridgeGP.getInstance().getAddon(), claim.getID().toString(), points, claim.getLesserBoundaryCorner().getWorld().getUID())
                 .setHtmlDisplay(label)
                 .setHeight(extrude ? claimFloor : (float) BlueBridgeGPConfig.getInstance().renderHeight() + heightModifier)
                 .setExtrude(extrude)
@@ -76,22 +69,17 @@ public class GriefPreventionIntegration{
                 .setColor(fillColor)
                 .setBorderColor(borderColor)
                 .build();
-        claims.put(claim.getID(), rs);
     }
 
     public void removeClaim(Claim claim){
-        claims.remove(claim.getID());
+        ActiveAddonEventHandler.delete(new RegionSnapshotBuilder(BlueBridgeGP.getInstance().getAddon(), claim.getID().toString(), Collections.emptyList(), claim.getLesserBoundaryCorner().getWorld().getUID()).build());
     }
 
-    public void resetClaims(){
-        claims.clear();
+    public List<RegionSnapshot> getAllClaims(UUID world){
+        return GriefPrevention.instance.dataStore.getClaims().stream().filter(claim -> claim.getLesserBoundaryCorner().getWorld().getUID().equals(world)).map(claim -> convertClaim(claim)).collect(Collectors.toList());
     }
 
-    public void addExistingClaims(){
-        for(Claim claim : GriefPrevention.instance.dataStore.getClaims()){
-            addOrUpdateClaim(claim);
-        }
-    }
+
 
     private BoundingBox trimmedBoundingBox(Claim claim){
         BoundingBox bb = new BoundingBox(claim);

@@ -2,6 +2,7 @@ package de.mark225.bluebridge.core.update;
 
 import de.bluecolored.bluemap.api.marker.MarkerAPI;
 import de.mark225.bluebridge.core.BlueBridgeCore;
+import de.mark225.bluebridge.core.addon.ActiveAddonEventHandler;
 import de.mark225.bluebridge.core.addon.AddonRegistry;
 import de.mark225.bluebridge.core.addon.BlueBridgeAddon;
 import de.mark225.bluebridge.core.bluemap.BlueMapIntegration;
@@ -49,6 +50,7 @@ public class UpdateTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        doSyncUpdate();
         List<BukkitRunnable> tasks = new CopyOnWriteArrayList<>();
         List<BlueBridgeAddon> addons = AddonRegistry.getIfActive(false);
         ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> newSnapshots = new ConcurrentHashMap<>();
@@ -68,6 +70,24 @@ public class UpdateTask extends BukkitRunnable {
         for(BukkitRunnable task : tasks){
             task.runTaskAsynchronously(BlueBridgeCore.getInstance());
         }
+    }
+
+    private void doSyncUpdate(){
+        ActiveAddonEventHandler.collectAndReset((addedOrUpdated, deleted) ->{
+            if(!addedOrUpdated.isEmpty() || !deleted.isEmpty()){
+                Bukkit.getScheduler().runTaskAsynchronously(BlueBridgeCore.getInstance(), () ->{
+                    BlueMapIntegration integration = BlueBridgeCore.getInstance().getBlueMapIntegration();
+                    MarkerAPI api = integration.loadMarkerAPI();
+                    integration.addOrUpdate(addedOrUpdated, api);
+                    integration.remove(deleted, api);
+                    try {
+                        api.save();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        });
     }
 
     private void doUpdate(ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> newSnapshots){

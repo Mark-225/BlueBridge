@@ -31,6 +31,8 @@ public class BlueMapIntegration implements BlueMapAPIListener {
             resetMarkers();
             UpdateTask.worlds.clear();
             UpdateTask.worlds.addAll(blueMapAPI.getWorlds().stream().map(BlueMapWorld::getUuid).collect(Collectors.toList()));
+            BlueBridgeCore.getInstance().addAllActiveRegions();
+
             BlueBridgeCore.getInstance().startUpdateTask();
         });
     }

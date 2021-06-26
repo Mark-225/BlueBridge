@@ -131,6 +131,7 @@ public class WorldGuardIntegration {
 
                 return new RegionSnapshotBuilder(BlueBridgeWG.getInstance().getAddon(), pr.getId(), points, worldUUID)
                         .setHtmlDisplay(parseHtmlDisplay(pr))
+                        .setShortName(pr.getId())
                         .setHeight(extrude ? pr.getMinimumPoint().getBlockY() : height)
                         .setExtrude(extrude)
                         .setUpperHeight(pr.getMaximumPoint().getBlockY() +1)

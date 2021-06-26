@@ -23,6 +23,7 @@ public class RegionSnapshotBuilder {
     private void prefillDefaults(){
         AddonConfig cfg = addon.addonConfig();
         region.setHtmlDisplay("unnamed");
+        region.setShortName("unnamed");
         region.setHeight(cfg.renderHeight());
         //Probably not all addons support extrusion so it's better to default to false instead of letting the user accidentally set this to true for unsupported addons
         region.setExtrude(false);
@@ -37,6 +38,11 @@ public class RegionSnapshotBuilder {
 
     public RegionSnapshotBuilder setHtmlDisplay(String display){
         region.setHtmlDisplay(display);
+        return this;
+    }
+
+    public RegionSnapshotBuilder setShortName(String name){
+        region.setShortName(name);
         return this;
     }
 

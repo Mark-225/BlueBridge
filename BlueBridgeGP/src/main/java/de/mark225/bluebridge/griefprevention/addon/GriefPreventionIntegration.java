@@ -63,6 +63,7 @@ public class GriefPreventionIntegration{
 
         return new RegionSnapshotBuilder(BlueBridgeGP.getInstance().getAddon(), claim.getID().toString(), points, claim.getLesserBoundaryCorner().getWorld().getUID())
                 .setHtmlDisplay(label)
+                .setShortName(label)
                 .setHeight(extrude ? claimFloor : (float) BlueBridgeGPConfig.getInstance().renderHeight() + heightModifier)
                 .setExtrude(extrude)
                 .setUpperHeight(claimCeiling)

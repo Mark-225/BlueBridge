@@ -36,11 +36,9 @@ public class BlueBridgeCore extends JavaPlugin {
 
     @Override
     public void onEnable(){
-        getLogger().log(Level.INFO, "Enabling BlueBridge Core");
-
         blueMapIntegration = new BlueMapIntegration();
-        BlueMapAPI.registerListener(blueMapIntegration);
-
+        BlueMapAPI.onEnable(blueMapIntegration::onEnable);
+        BlueMapAPI.onDisable(blueMapIntegration::onDisable);
     }
 
 

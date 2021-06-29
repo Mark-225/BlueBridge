@@ -18,13 +18,13 @@ import org.bukkit.util.StringUtil;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class BlueMapIntegration implements BlueMapAPIListener {
+public class BlueMapIntegration {
 
     private BlueMapAPI blueMapAPI = null;
 
-    @Override
     public void onEnable(BlueMapAPI blueMapAPI) {
         this.blueMapAPI = blueMapAPI;
         Bukkit.getScheduler().runTask(BlueBridgeCore.getInstance(), () ->{
@@ -39,7 +39,6 @@ public class BlueMapIntegration implements BlueMapAPIListener {
         });
     }
 
-    @Override
     public void onDisable(BlueMapAPI blueMapApi) {
         BlueBridgeCore.getInstance().stopUpdateTask();
     }

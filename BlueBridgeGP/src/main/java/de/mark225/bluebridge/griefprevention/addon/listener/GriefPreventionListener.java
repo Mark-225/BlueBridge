@@ -3,7 +3,6 @@ package de.mark225.bluebridge.griefprevention.addon.listener;
 import de.mark225.bluebridge.core.config.BlueBridgeConfig;
 import de.mark225.bluebridge.griefprevention.BlueBridgeGP;
 import me.ryanhamshire.GriefPrevention.Claim;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import me.ryanhamshire.GriefPrevention.events.ClaimCreatedEvent;
 import me.ryanhamshire.GriefPrevention.events.ClaimDeletedEvent;
 import me.ryanhamshire.GriefPrevention.events.ClaimExtendEvent;
@@ -26,15 +25,18 @@ public class GriefPreventionListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onClaimModified(ClaimModifiedEvent e){
-        if(BlueBridgeConfig.debug()) BlueBridgeGP.getInstance().getLogger().log(Level.INFO, "Claim modified " + e.getClaim().getID());
+        if(BlueBridgeConfig.debug()) BlueBridgeGP.getInstance().getLogger().log(Level.INFO, "Claim modified " + e.getFrom().getID());
         if(e.isCancelled()) return;
-        scheduleUpdate(e.getTo());
+        scheduleUpdate(e.getFrom());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onClaimExend(ClaimExtendEvent e){
+    public void onClaimExtend(ClaimExtendEvent e){
         if(BlueBridgeConfig.debug()) BlueBridgeGP.getInstance().getLogger().log(Level.INFO, "Claim extended " + e.getClaim().getID());
         if(e.isCancelled()) return;
+        Claim claim = e.getClaim();
+        while(claim.parent != null)
+            claim = claim.parent;
         scheduleUpdate(e.getClaim());
     }
 
@@ -50,7 +52,11 @@ public class GriefPreventionListener implements Listener {
 
     public void scheduleUpdate(Claim claim){
         Bukkit.getScheduler().runTaskLater(BlueBridgeGP.getInstance(), () ->{
-            BlueBridgeGP.getInstance().getGPIntegration().addOrUpdateClaim(GriefPrevention.instance.dataStore.getClaim(claim.getID()));
+            Claim toUpdate = claim;
+            if(!toUpdate.inDataStore) return;
+            while(toUpdate.parent != null)
+                toUpdate = toUpdate.parent;
+            BlueBridgeGP.getInstance().getGPIntegration().addOrUpdateClaim(toUpdate);
         }, 0l);
     }
 

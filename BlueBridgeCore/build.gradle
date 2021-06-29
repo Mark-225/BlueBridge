@@ -46,6 +46,6 @@ shadowJar {
         exclude(dependency {
             exclude_modules.contains(it.name)
         })
-    }// replacement that I haven't see anywhere else
+    }
 }
 

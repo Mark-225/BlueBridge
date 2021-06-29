@@ -1,7 +1,7 @@
 subprojects {
     apply plugin: 'java'
 
-    version 'v1.2.1-alpha'
+    version 'v1.3-alpha'
 
     //Contributors are added to this list in the order of their first contribution. Separate using a comma and space.
     def authors = 'Mark_225, Aurelien30000'
@@ -19,7 +19,7 @@ subprojects {
 
     configurations {
         provided
-        implementation.extendsFrom provided //implementation is useful for compiling with spark dependencies but having a smaller jar since they are already in the classpath
+        implementation.extendsFrom provided
     }
 
     dependencies {

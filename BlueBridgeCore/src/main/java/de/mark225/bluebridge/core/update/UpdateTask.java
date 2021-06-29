@@ -14,13 +14,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class UpdateTask extends BukkitRunnable {
@@ -50,7 +49,6 @@ public class UpdateTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        doSyncUpdate();
         List<BukkitRunnable> tasks = new CopyOnWriteArrayList<>();
         List<BlueBridgeAddon> addons = AddonRegistry.getIfActive(false);
         ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> newSnapshots = new ConcurrentHashMap<>();
@@ -72,21 +70,10 @@ public class UpdateTask extends BukkitRunnable {
         }
     }
 
-    private void doSyncUpdate(){
+    private void doSyncUpdate(BlueMapIntegration integration, MarkerAPI api){
         ActiveAddonEventHandler.collectAndReset((addedOrUpdated, deleted) ->{
-            if(!addedOrUpdated.isEmpty() || !deleted.isEmpty()){
-                Bukkit.getScheduler().runTaskAsynchronously(BlueBridgeCore.getInstance(), () ->{
-                    BlueMapIntegration integration = BlueBridgeCore.getInstance().getBlueMapIntegration();
-                    MarkerAPI api = integration.loadMarkerAPI();
-                    integration.addOrUpdate(addedOrUpdated, api);
-                    integration.remove(deleted, api);
-                    try {
-                        api.save();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
+            integration.addOrUpdate(addedOrUpdated, api);
+            integration.remove(deleted, api);
         });
     }
 
@@ -122,10 +109,28 @@ public class UpdateTask extends BukkitRunnable {
         MarkerAPI api = integration.loadMarkerAPI();
         integration.addOrUpdate(addedOrUpdated, api);
         integration.remove(removed, api);
-        try {
-            api.save();
-        } catch (IOException e) {
-            e.printStackTrace();
+        doSyncUpdate(integration, api);
+        //"Workaround" for very rare exceptions while saving by retrying up to two times
+        Logger logger = BlueBridgeCore.getInstance().getLogger();
+        int retries = 3;
+        while (retries > 0) {
+            try {
+                api.save();
+                break;
+            } catch (IOException e) {
+                e.printStackTrace();
+                retries--;
+                if(retries > 0 ){
+                    logger.log(Level.INFO, "BlueBridge save attempt failed. Retrying in 0.5 seconds");
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException interruptedException) {
+                        interruptedException.printStackTrace();
+                    }
+                }else{
+                    logger.log(Level.WARNING, "BlueBridge Marker save failed after 3 attempts. Some markers might be out of sync with their respective regions.");
+                }
+            }
         }
         lastSnapshots = newSnapshots;
         reschedule();

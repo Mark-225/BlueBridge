@@ -8,19 +8,17 @@ import de.mark225.bluebridge.core.addon.BlueBridgeAddon;
 import de.mark225.bluebridge.core.bluemap.BlueMapIntegration;
 import de.mark225.bluebridge.core.config.BlueBridgeConfig;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class UpdateTask extends BukkitRunnable {
 

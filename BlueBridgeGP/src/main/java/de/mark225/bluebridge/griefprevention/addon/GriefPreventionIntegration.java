@@ -16,6 +16,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GriefPreventionIntegration{
 
@@ -77,7 +78,7 @@ public class GriefPreventionIntegration{
     }
 
     public List<RegionSnapshot> getAllClaims(UUID world){
-        return GriefPrevention.instance.dataStore.getClaims().stream().filter(claim -> claim.getLesserBoundaryCorner().getWorld().getUID().equals(world)).map(claim -> convertClaim(claim)).collect(Collectors.toList());
+        return GriefPrevention.instance.dataStore.getClaims().stream().filter(claim -> claim.getLesserBoundaryCorner().getWorld().getUID().equals(world)).flatMap(claim -> Stream.concat(Stream.of(claim.children.toArray(new Claim[0])),Stream.of(claim))).map(claim -> convertClaim(claim)).collect(Collectors.toList());
     }
 
 

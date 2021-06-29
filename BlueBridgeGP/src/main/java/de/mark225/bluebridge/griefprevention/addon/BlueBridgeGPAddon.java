@@ -6,11 +6,11 @@ import de.mark225.bluebridge.core.region.RegionSnapshot;
 import de.mark225.bluebridge.griefprevention.BlueBridgeGP;
 import de.mark225.bluebridge.griefprevention.config.BlueBridgeGPConfig;
 
-import java.util.Collection;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
-public class BlueBridgeGPAddon implements BlueBridgeAddon {
+public class BlueBridgeGPAddon extends BlueBridgeAddon {
     @Override
     public String name() {
         return "BlueBridgeGP";
@@ -32,13 +32,17 @@ public class BlueBridgeGPAddon implements BlueBridgeAddon {
     }
 
     @Override
-    public Collection<RegionSnapshot> fetchSnapshots(UUID world) {
-        return BlueBridgeGP.getInstance().getGPIntegration().getClaims().values().stream().filter(rs -> rs.getWorld().equals(world)).collect(Collectors.toList());
+    public ConcurrentMap<String, RegionSnapshot> fetchSnapshots(UUID world) {
+        return BlueBridgeGP.getInstance().getGPIntegration().getAllClaims(world).stream().collect(Collectors.toConcurrentMap(RegionSnapshot::getId, rs -> rs));
     }
 
     @Override
     public void reload() {
         BlueBridgeGP.getInstance().updateConfig();
-        BlueBridgeGP.getInstance().getGPIntegration().reload();
+    }
+
+    @Override
+    public boolean isActiveAddon() {
+        return true;
     }
 }

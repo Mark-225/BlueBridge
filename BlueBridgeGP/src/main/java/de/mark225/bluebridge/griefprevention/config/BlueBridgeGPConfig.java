@@ -22,29 +22,29 @@ public class BlueBridgeGPConfig extends AddonConfig {
         init(config);
     }
 
-    public boolean defaultExtrude(){
+    public synchronized boolean defaultExtrude(){
         return config.getBoolean("defaultExtrude", false);
     }
 
-    public Color adminFillColor(){
+    public synchronized Color adminFillColor(){
         String rgba = config.getString("adminFillColor", "96fd6600");
         if(!rgbaRegex.matcher(rgba).matches())
             rgba = "96fd6600";
         return BlueBridgeUtils.stringToColor(rgba);
     }
 
-    public Color adminOutlineColor(){
+    public synchronized Color adminOutlineColor(){
         String rgb = config.getString("adminOutlineColor", "fd6600");
         if(!rgbRegex.matcher(rgb).matches())
             rgb = "fd6600";
         return BlueBridgeUtils.stringToColor(rgb);
     }
 
-    public String adminDisplayName(){
+    public synchronized String adminDisplayName(){
         return config.getString("adminDisplayName", "Server Claim");
     }
 
-    public boolean layerChildren(){
+    public synchronized boolean layerChildren(){
         return config.getBoolean("layerChildren", true);
     }
 }

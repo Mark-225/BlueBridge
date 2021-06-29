@@ -13,15 +13,16 @@ import java.util.UUID;
 public class RegionSnapshot {
     private String addon;
     private String id;
-    private String htmlDisplay;
+    private String htmlDisplay = "undefined";
+    private String shortName = "undefined";
     private UUID world;
-    private float height;
-    private boolean extrude;
-    private float upperHeight;
-    private boolean depthCheck;
+    private float height = 0;
+    private boolean extrude = false;
+    private float upperHeight = 0;
+    private boolean depthCheck = false;
     private List<Vector2d> points;
-    private Color color;
-    private Color borderColor;
+    private Color color = Color.BLACK;
+    private Color borderColor = Color.BLACK;
     private double minDistance;
     private double maxDistance;
 
@@ -30,22 +31,6 @@ public class RegionSnapshot {
         this.id = id;
         this.points = points;
         this.world = world;
-    }
-
-    public RegionSnapshot(String addon, String id, String htmlDisplay, UUID world, float height, boolean extrude, float upperHeight, boolean depthCheck, List<Vector2d> points, Color color, Color borderColor, double minDistance, double maxDistance) {
-        this.addon = addon;
-        this.id = id;
-        this.htmlDisplay = htmlDisplay;
-        this.world = world;
-        this.height = height;
-        this.extrude = extrude;
-        this.upperHeight = upperHeight;
-        this.depthCheck = depthCheck;
-        this.points = points;
-        this.color = color;
-        this.borderColor = borderColor;
-        this.minDistance = minDistance;
-        this.maxDistance = maxDistance;
     }
 
     public String getAddon(){
@@ -72,8 +57,12 @@ public class RegionSnapshot {
         return depthCheck;
     }
 
-    public String getName() {
+    public String getHtmlDisplay() {
         return htmlDisplay;
+    }
+
+    public String getShortName() {
+        return shortName;
     }
 
     public UUID getWorld() {
@@ -102,6 +91,15 @@ public class RegionSnapshot {
 
     public void setHtmlDisplay(String htmlDisplay) {
         this.htmlDisplay = htmlDisplay;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getAddon(), getId(), getHtmlDisplay(), getShortName(), getWorld(), getHeight(), isExtrude(), getUpperHeight(), getDepthCheck(), getPoints(), getColor(), getBorderColor(), getMinDistance(), getMaxDistance());
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public void setHeight(float height) {
@@ -162,6 +160,12 @@ public class RegionSnapshot {
         if(other == this)
             return true;
         return other.getAddon().equals(this.getAddon()) && other.getId().equals(this.getId());
+    }
+
+    public enum State{
+        UNCHANGED,
+        CHANGED_OR_ADDED,
+        DELETED
     }
 
 }

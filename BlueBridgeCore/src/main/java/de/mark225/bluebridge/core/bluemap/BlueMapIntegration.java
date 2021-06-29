@@ -5,32 +5,40 @@ import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapAPIListener;
 import de.bluecolored.bluemap.api.BlueMapMap;
+import de.bluecolored.bluemap.api.BlueMapWorld;
 import de.bluecolored.bluemap.api.marker.*;
 import de.mark225.bluebridge.core.BlueBridgeCore;
 import de.mark225.bluebridge.core.addon.AddonRegistry;
 import de.mark225.bluebridge.core.addon.BlueBridgeAddon;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
+import de.mark225.bluebridge.core.update.UpdateTask;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.util.StringUtil;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
-public class BlueMapIntegration implements BlueMapAPIListener {
+public class BlueMapIntegration {
 
     private BlueMapAPI blueMapAPI = null;
 
-    @Override
     public void onEnable(BlueMapAPI blueMapAPI) {
         this.blueMapAPI = blueMapAPI;
         Bukkit.getScheduler().runTask(BlueBridgeCore.getInstance(), () ->{
             BlueBridgeCore.getInstance().updateConfig();
             BlueBridgeCore.getInstance().reloadAddons();
             resetMarkers();
+            UpdateTask.worlds.clear();
+            UpdateTask.worlds.addAll(blueMapAPI.getWorlds().stream().map(BlueMapWorld::getUuid).collect(Collectors.toList()));
+            BlueBridgeCore.getInstance().addAllActiveRegions();
+
             BlueBridgeCore.getInstance().startUpdateTask();
         });
     }
 
-    @Override
     public void onDisable(BlueMapAPI blueMapApi) {
         BlueBridgeCore.getInstance().stopUpdateTask();
     }
@@ -99,13 +107,15 @@ public class BlueMapIntegration implements BlueMapAPIListener {
     private void addToMarkerSet(MarkerSet ms, BlueMapMap map, RegionSnapshot rs, Shape shape, Vector3d pos){
         if(rs.isExtrude()){
             ExtrudeMarker em = ms.createExtrudeMarker(getGlobalRegionId(rs.getAddon(), rs.getId(), map.getId(), rs.getWorld().toString()), map, pos, shape, rs.getHeight(), rs.getUpperHeight());
-            em.setLabel(rs.getName());
+            em.setLabel(StringEscapeUtils.escapeHtml(rs.getShortName()));
+            em.setDetail(rs.getHtmlDisplay());
             em.setColors(rs.getBorderColor(), rs.getColor());
             em.setDepthTestEnabled(rs.getDepthCheck());
             defineDistances(em, rs);
         }else{
             ShapeMarker sm = ms.createShapeMarker(getGlobalRegionId(rs.getAddon(), rs.getId(), map.getId(), rs.getWorld().toString()), map, pos, shape, rs.getHeight());
-            sm.setLabel(rs.getName());
+            sm.setLabel(StringEscapeUtils.escapeHtml(rs.getShortName()));
+            sm.setDetail(rs.getHtmlDisplay());
             sm.setColors(rs.getBorderColor(), rs.getColor());
             sm.setDepthTestEnabled(rs.getDepthCheck());
             defineDistances(sm, rs);

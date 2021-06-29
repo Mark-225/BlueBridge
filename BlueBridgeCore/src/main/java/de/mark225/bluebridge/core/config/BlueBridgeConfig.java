@@ -11,53 +11,53 @@ public class BlueBridgeConfig {
     private static Pattern rgbaRegex = Pattern.compile("[0-9a-f]{8}");
     private static Pattern rgbRegex = Pattern.compile("[0-9a-f]{6}");
 
-    public static void setConfig(FileConfiguration config){
+    public static synchronized void setConfig(FileConfiguration config){
         BlueBridgeConfig.config = config;
     }
 
-    public static int updateInterval(){
+    public static synchronized int updateInterval(){
         return config.getInt("updateInterval", 200);
     }
 
-    public static boolean defaultRender(){
+    public static synchronized boolean defaultRender(){
         return config.getBoolean("defaultRender", true);
     }
 
-    public static boolean defaultHideSets(){
+    public static synchronized boolean defaultHideSets(){
         return config.getBoolean("hideMarkerset", false);
     }
 
-    public static boolean defaultDepthCheck(){
+    public static synchronized boolean defaultDepthCheck(){
         return config.getBoolean("defaultDepthCheck", false);
     }
 
-    public static int renderHeight(){
+    public static synchronized int renderHeight(){
         return config.getInt("renderHeight", 63);
     }
 
-    public static double minDistance(){
+    public static synchronized double minDistance(){
         return config.getDouble("minDistance", 10.0);
     }
 
-    public static double maxDistance(){
+    public static synchronized double maxDistance(){
         return config.getDouble("maxDistance", 500.0);
     }
 
-    public static Color defaultColor(){
+    public static synchronized Color defaultColor(){
         String rgba = config.getString("defaultColor", "960087ff");
         if(!rgbaRegex.matcher(rgba).matches())
             rgba = "960087ff";
         return BlueBridgeUtils.stringToColor(rgba);
     }
 
-    public static Color defaultOutlineColor(){
+    public static synchronized Color defaultOutlineColor(){
         String rgb = config.getString("defaultOutlineColor", "0060ff");
         if(!rgbRegex.matcher(rgb).matches())
             rgb = "0060ff";
         return BlueBridgeUtils.stringToColor(rgb);
     }
 
-    public static boolean debug(){
+    public static synchronized boolean debug(){
         return config.getBoolean("debug", false);
     }
 }

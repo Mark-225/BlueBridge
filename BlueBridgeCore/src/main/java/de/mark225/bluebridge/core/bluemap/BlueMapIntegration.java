@@ -10,6 +10,7 @@ import de.bluecolored.bluemap.api.marker.*;
 import de.mark225.bluebridge.core.BlueBridgeCore;
 import de.mark225.bluebridge.core.addon.AddonRegistry;
 import de.mark225.bluebridge.core.addon.BlueBridgeAddon;
+import de.mark225.bluebridge.core.config.BlueBridgeConfig;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
 import de.mark225.bluebridge.core.update.UpdateTask;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -32,9 +33,9 @@ public class BlueMapIntegration {
             BlueBridgeCore.getInstance().reloadAddons();
             resetMarkers();
             UpdateTask.worlds.clear();
+            UpdateTask.resetLastSnapshots();
             UpdateTask.worlds.addAll(blueMapAPI.getWorlds().stream().map(BlueMapWorld::getUuid).collect(Collectors.toList()));
             BlueBridgeCore.getInstance().addAllActiveRegions();
-
             BlueBridgeCore.getInstance().startUpdateTask();
         });
     }

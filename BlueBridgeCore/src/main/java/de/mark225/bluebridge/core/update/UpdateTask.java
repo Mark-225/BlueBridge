@@ -30,6 +30,10 @@ public class UpdateTask extends BukkitRunnable {
 
     private static boolean locked = true;
 
+    public static synchronized void resetLastSnapshots(){
+        lastSnapshots.clear();
+    }
+
     public static synchronized void createAndSchedule(boolean instant){
         if(currentTask == null && !locked){
             currentTask = new UpdateTask();
@@ -47,25 +51,24 @@ public class UpdateTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        List<BukkitRunnable> tasks = new CopyOnWriteArrayList<>();
         List<BlueBridgeAddon> addons = AddonRegistry.getIfActive(false);
         ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> newSnapshots = new ConcurrentHashMap<>();
-        for(UUID world : worlds){
-            tasks.add(new BukkitRunnable() {
+        new BukkitRunnable() {
                 @Override
                 public void run() {
                     for(BlueBridgeAddon addon : addons){
-                        newSnapshots.put(addon.name(), addon.fetchSnapshots(world));
+                        for(UUID world : worlds) {
+                            ConcurrentMap<String, RegionSnapshot> worldSnapshots = addon.fetchSnapshots(world);
+                            if(newSnapshots.containsKey(addon.name())){
+                                newSnapshots.get(addon.name()).putAll(worldSnapshots);
+                            }else {
+                                newSnapshots.put(addon.name(), worldSnapshots);
+                            }
+                        }
                     }
-                    tasks.remove(this);
-                    if(tasks.isEmpty())
-                        doUpdate(newSnapshots);
+                    doUpdate(newSnapshots);
                 }
-            });
-        }
-        for(BukkitRunnable task : tasks){
-            task.runTaskAsynchronously(BlueBridgeCore.getInstance());
-        }
+        }.runTaskAsynchronously(BlueBridgeCore.getInstance());
     }
 
     private void doSyncUpdate(BlueMapIntegration integration, MarkerAPI api){

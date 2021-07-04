@@ -71,9 +71,6 @@ public class BlueMapIntegration {
 
     public void addOrUpdate(Collection<RegionSnapshot> regions, MarkerAPI markers){
         for(RegionSnapshot rs : regions){
-            if(BlueBridgeConfig.debug()){
-                BlueBridgeCore.getInstance().getLogger().log(Level.INFO, "Creating marker " + rs.getId());
-            }
             Shape shape = new Shape(rs.getPoints().toArray(new Vector2d[0]));
             Vector2d midPoint2d = findMidpoint(rs.getPoints());
             Vector3d pos = new Vector3d(midPoint2d.getX(), rs.getHeight(), midPoint2d.getY());

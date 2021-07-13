@@ -1,8 +1,5 @@
-repositories {
-    maven { url "https://jitpack.io" }
-}
 
 dependencies {
-    compile project(':BlueBridgeCore')
-    compileOnly 'com.github.TechFortress:GriefPrevention:16.17.1'
+    implementation project(':BlueBridgeCore')
+    implementation 'com.github.TechFortress:GriefPrevention:16.17.1'
 }

@@ -12,7 +12,7 @@ public class BlueBridgeUtils {
     }
 
     public static String replace(StringLookupWrapper stringLookup, String input){
-        return new StringSubstitutor(stringLookup).replace(input);
+        return new StringSubstitutor(stringLookup.lookup).replace(input);
     }
 
     public static Color stringToColor(String hex){

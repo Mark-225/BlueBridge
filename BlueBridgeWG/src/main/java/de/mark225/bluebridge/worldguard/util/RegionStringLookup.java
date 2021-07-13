@@ -33,14 +33,10 @@ public class RegionStringLookup extends StringLookupWrapper {
 
 
     @Override
-    public String lookup(String key) {
+    public String replace(String key) {
         if(cache.containsKey(key))
             return cache.get(key);
         String result = fetch(key);
-        if(BlueBridgeConfig.debug()){
-            Logger log = BlueBridgeCore.getInstance().getLogger();
-            log.info("Region: " + region.getId() + " Key: " + key + " Value: " + result);
-        }
         cache.put(key, result);
         return result;
     }

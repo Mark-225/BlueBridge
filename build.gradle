@@ -1,7 +1,7 @@
 subprojects {
     apply plugin: 'java'
 
-    version 'v1.2.1-alpha'
+    version 'v1.3.1-alpha'
 
     //Contributors are added to this list in the order of their first contribution. Separate using a comma and space.
     def authors = 'Mark_225, Aurelien30000'
@@ -13,14 +13,20 @@ subprojects {
 
     repositories{
         mavenCentral()
+        maven { url "https://jitpack.io" }
         maven {url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"}
     }
 
-    dependencies {
-        compileOnly "org.bukkit:bukkit:1.13.2-R0.1-SNAPSHOT"
-        compile 'com.flowpowered:flow-math:1.0.3'
+    configurations {
+        provided
+        implementation.extendsFrom provided
     }
 
+    dependencies {
+        provided "org.bukkit:bukkit:1.13.2-R0.1-SNAPSHOT"
+        provided 'com.flowpowered:flow-math:1.0.3'
+    }
+    
     tasks.withType(Jar) {
         destinationDirectory = file("$rootDir/build/target")
     }

@@ -14,32 +14,38 @@ plugins {
     id "com.github.johnrengelman.shadow" version "6.0.0"
 }
 
-repositories {
-    maven { url 'https://jitpack.io' }
-}
 
 dependencies {
-    implementation 'com.github.BlueMap-Minecraft:BlueMapAPI:v1.5.0'
+    provided 'com.github.BlueMap-Minecraft:BlueMapAPI:v1.6.0'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
-    compile group: 'org.apache.commons', name: 'commons-text', version: '1.9'
+    implementation 'org.apache.commons:commons-text:1.9'
 }
 
-configurations {
-    runtime.exclude group: 'com.github.BlueMap-Minecraft'
-    runtime.exclude group: 'com.flowpowered'
-}
 tasks.build.dependsOn tasks.shadowJar
 
 jar{
     archiveClassifier = 'NoDependencies'
 }
 
-shadowJar{
+shadowJar {
+    zip64 = true
+    mergeServiceFiles()
+    relocate 'org.apache.commons.text', 'de.mark225.shadow.org.apache.commons.text'
+    relocate 'org.apache.commons.lang3', 'de.mark225.shadow.org.apache.commons.lang3'
     archiveClassifier = ''
+    def exclude_modules = project
+            .configurations
+            .provided
+            .resolvedConfiguration
+            .getLenientConfiguration()
+            .getAllModuleDependencies()
+            .collect {
+                it.name
+            }
     dependencies {
-        exclude(dependency('com.github.BlueMap-Minecraft:BlueMapAPI:v1.1.0'))
-        exclude(dependency('org.bukkit:bukkit:1.13-R0.1-SNAPSHOT'))
+        exclude(dependency {
+            exclude_modules.contains(it.name)
+        })
     }
-    relocate 'org.apache', 'de.mark225.shadow.org.apache'
 }
 

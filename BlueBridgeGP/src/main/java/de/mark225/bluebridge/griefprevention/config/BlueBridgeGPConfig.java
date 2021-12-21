@@ -33,18 +33,22 @@ public class BlueBridgeGPConfig extends AddonConfig {
         return BlueBridgeUtils.stringToColor(rgba);
     }
 
-    public synchronized Color adminOutlineColor(){
+    public synchronized Color adminOutlineColor() {
         String rgb = config.getString("adminOutlineColor", "fd6600");
-        if(!rgbRegex.matcher(rgb).matches())
+        if (!rgbRegex.matcher(rgb).matches())
             rgb = "fd6600";
         return BlueBridgeUtils.stringToColor(rgb);
     }
 
     public synchronized String adminDisplayName(){
-        return config.getString("adminDisplayName", "Server Claim");
+        return config.getString("adminDisplayName", "Admin");
     }
 
     public synchronized boolean layerChildren(){
         return config.getBoolean("layerChildren", true);
+    }
+
+    public synchronized String htmlDisplay() {
+        return config.getString("htmlPreset", "<span>${owner}'s Claim");
     }
 }

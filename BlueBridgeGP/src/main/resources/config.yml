@@ -16,3 +16,46 @@ defaultExtrude: false
 # ensure that the correct popup is displayed when clicking on them. You can set this to false if you don't like the look of multiple "layers" of markers.
 layerChildren: true
 
+# HTML Preset for the claim detail tooltip.
+# You can use any HTML tags here. Use the following placeholders to insert claim-specific data:
+# ${owner} or ${owner:adminOverride}: The owner of the claim. Replace "adminOverride" with any text that should instead be used, when the claim is an admin claim.
+# ${size} or ${size:3d}: The area or volume of the claim. ${size:true} shows the volume, ${size:false} and ${size} the area.
+# ${trustlist:type:delimiter:limit:showRemaining}: Displays a list of players with a specific permission on this claim:
+#                                                     type:           The type of permission (replace with builders, containers, accessors or managers)
+#                                                     delimiter:      The text between each name in the list. Use "<br>" for a new line after each name, or "," for a comma-separated list.
+#                                                     limit:          Replace with any integer. If more than the specified amount of players have the permission, any further players won't be displayed.
+#                                                     showRemaining:  If there were more players than the defined limit, add "+X more" as an extra entry.
+#
+# Example:
+# For a claim with five builders and this placeholder: ${trustlist:builders:, :3:true} the output would be:
+# player1, player2, player3, +2 more
+htmlPreset: |-
+  <h2 style="text-align:center;margin-block-end:0.3em">
+  ${owner:Admin}'s Claim
+  </h2>
+  <p style="text-align:center">
+  Area: ${size}<br>Volume: ${size:true}
+  </p>
+  <div style="display:flex">
+  <div style="flex:50%;padding:10px">
+  <h3 style="margin-block-start:0.3em;margin-block-end:0.3em">
+  Builders
+  </h3>
+  <p>
+  <span>
+  ${trustlist:builders:<br>:5:true}
+  </span>
+  </p>
+  </div>
+  <div style="flex:50%;padding:10px">
+  <h3 style="margin-block-start:0.3em;margin-block-end:0.3em">
+  Containers
+  </h3>
+  <p>
+  <span>
+  ${trustlist:containers:<br>:5:true}
+  </span>
+  </p>
+  </div>
+  </p>
+

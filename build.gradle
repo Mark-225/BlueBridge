@@ -1,4 +1,10 @@
+plugins{
+    id "java"
+    id "idea"
+}
+
 subprojects {
+
     apply plugin: 'java'
 
     version 'v1.3.1-alpha'
@@ -34,6 +40,13 @@ subprojects {
     processResources{
         filesMatching('plugin.yml'){
             expand([gradleVersion: version, contributors: authors])
+        }
+    }
+
+    idea {
+        module {
+            downloadJavadoc = true
+            downloadSources = true
         }
     }
 }

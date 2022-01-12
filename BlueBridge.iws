@@ -5,15 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a9f036e9-8de7-4a91-a322-3bb1fc53f4b0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/BlueBridge.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BlueBridge.ipr" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BlueBridge.iws" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BlueBridgeGP/src/main/java/de/mark225/bluebridge/griefprevention/util/ClaimStringLookup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlueBridgeGP/src/main/java/de/mark225/bluebridge/griefprevention/addon/GriefPreventionIntegration.java" beforeDir="false" afterPath="$PROJECT_DIR$/BlueBridgeGP/src/main/java/de/mark225/bluebridge/griefprevention/addon/GriefPreventionIntegration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlueBridgeGP/src/main/java/de/mark225/bluebridge/griefprevention/config/BlueBridgeGPConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/BlueBridgeGP/src/main/java/de/mark225/bluebridge/griefprevention/config/BlueBridgeGPConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlueBridgeGP/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/BlueBridgeGP/src/main/resources/config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BlueBridge.iws" beforeDir="false" afterPath="$PROJECT_DIR$/BlueBridge.iws" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -272,7 +264,7 @@
       <workItem from="1639236496163" duration="6925000" />
       <workItem from="1639332660895" duration="1669000" />
       <workItem from="1639950903338" duration="2821000" />
-      <workItem from="1640117054319" duration="5381000" />
+      <workItem from="1640117054319" duration="6238000" />
     </task>
     <servers />
   </component>

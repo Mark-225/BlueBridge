@@ -6,10 +6,7 @@ import com.sk89q.worldedit.math.BlockVector2;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.protection.flags.Flag;
-import com.sk89q.worldguard.protection.flags.IntegerFlag;
-import com.sk89q.worldguard.protection.flags.StateFlag;
-import com.sk89q.worldguard.protection.flags.StringFlag;
+import com.sk89q.worldguard.protection.flags.*;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -38,6 +35,8 @@ public class WorldGuardIntegration {
     public static StringFlag COLOR_FLAG;
     public static StringFlag OUTLINE_FLAG;
     public static StringFlag DISPLAY_FLAG;
+    public static DoubleFlag MAX_DISTANCE_FLAG;
+    public static DoubleFlag MIN_DISTANCE_FLAG;
 
     private static final Pattern hexPatternRGBA = Pattern.compile("[0-9a-f]{8}");
     private static final Pattern hexPatternRGB = Pattern.compile("[0-9a-f]{6}");
@@ -57,7 +56,9 @@ public class WorldGuardIntegration {
             StringFlag colorFlag = new StringFlag("bluemap-color", Integer.toHexString(BlueBridgeWGConfig.getInstance().defaultColor().getRGB()));
             StringFlag outlineFlag = new StringFlag("bluemap-color-outline", Integer.toHexString(BlueBridgeWGConfig.getInstance().defaultOutlineColor().getRGB()).substring(2));
             StringFlag displayFlag = new StringFlag("bluemap-display");
-            flags.registerAll(Arrays.asList(new Flag[]{renderFlag, depthCheckFlag, heightFlag, extrudeFlag, colorFlag, outlineFlag, displayFlag}));
+            DoubleFlag maxDistanceFlag = new DoubleFlag("bluemap-max-distance");
+            DoubleFlag minDistanceFlag = new DoubleFlag("bluemap-min-distance");
+            flags.registerAll(Arrays.asList(new Flag[]{renderFlag, depthCheckFlag, heightFlag, extrudeFlag, colorFlag, outlineFlag, displayFlag, maxDistanceFlag, minDistanceFlag}));
             RENDER_FLAG = renderFlag;
             HEIGHT_FLAG = heightFlag;
             EXTRUDE_FLAG = extrudeFlag;
@@ -65,6 +66,9 @@ public class WorldGuardIntegration {
             OUTLINE_FLAG = outlineFlag;
             DISPLAY_FLAG = displayFlag;
             DEPTH_CHECK_FLAG = depthCheckFlag;
+            MAX_DISTANCE_FLAG = maxDistanceFlag;
+            MIN_DISTANCE_FLAG = minDistanceFlag;
+
             return true;
         }catch(FlagConflictException e){
             BlueBridgeWG.getInstance().getLogger().severe("Custom Worldguard flags are conflicting with another plugin!");
@@ -125,6 +129,12 @@ public class WorldGuardIntegration {
                 StateFlag.State extrudeVal = pr.getFlag(EXTRUDE_FLAG);
                 boolean extrude = extrudeVal != null ? extrudeVal == StateFlag.State.ALLOW : BlueBridgeWGConfig.getInstance().defaultExtrude();
 
+                Double minFlag = pr.getFlag(MIN_DISTANCE_FLAG);
+                Double maxFlag = pr.getFlag(MAX_DISTANCE_FLAG);
+
+                double minDistance = minFlag != null ? minFlag : BlueBridgeWGConfig.getInstance().minDistance();
+                double maxDistance = maxFlag != null ? maxFlag : BlueBridgeWGConfig.getInstance().maxDistance();
+
                 int height = pr.getFlag(HEIGHT_FLAG) != null ? pr.getFlag(HEIGHT_FLAG) : BlueBridgeWGConfig.getInstance().renderHeight();
 
                 //create and return new RegionSnapshot
@@ -138,6 +148,8 @@ public class WorldGuardIntegration {
                         .setDepthCheck(depthCheck)
                         .setColor(colorRGBA)
                         .setBorderColor(colorRGB)
+                        .setMaxDistance(maxDistance)
+                        .setMinDistance(minDistance)
                         .build();
             }).collect(Collectors.toList());
         }

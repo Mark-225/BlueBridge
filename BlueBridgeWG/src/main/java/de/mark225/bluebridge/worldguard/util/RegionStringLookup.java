@@ -136,7 +136,7 @@ public class RegionStringLookup extends StringLookupWrapper {
     private String getFlagValue(String flagname){
         if(flagReg == null)
             flagReg = WorldGuard.getInstance().getFlagRegistry();
-        Flag flag = flagReg.get(flagname);
+        Flag<?> flag = flagReg.get(flagname);
         if(flag == null)
             return "[flag not registered]";
         Object flagValue = region.getFlag(flag);

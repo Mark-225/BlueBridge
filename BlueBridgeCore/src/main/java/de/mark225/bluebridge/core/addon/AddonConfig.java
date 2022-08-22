@@ -41,14 +41,14 @@ public abstract class AddonConfig {
         String rgba = config.getString("defaultColor", "");
         if (!rgbaRegex.matcher(rgba).matches())
             return BlueBridgeConfig.defaultColor();
-        return BlueBridgeUtils.stringToColor(rgba);
+        return new Color("#" + rgba);
     }
 
     public synchronized Color defaultOutlineColor() {
         String rgb = config.getString("defaultOutlineColor", "");
         if (!rgbRegex.matcher(rgb).matches())
             return BlueBridgeConfig.defaultOutlineColor();
-        return BlueBridgeUtils.stringToColor(rgb);
+        return new Color("#" + rgb);
     }
 
     public synchronized String markerSetName() {

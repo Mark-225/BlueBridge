@@ -47,14 +47,14 @@ public class BlueBridgeConfig {
         String rgba = config.getString("defaultColor", "960087ff");
         if (!rgbaRegex.matcher(rgba).matches())
             rgba = "960087ff";
-        return BlueBridgeUtils.stringToColor(rgba);
+        return new Color("#" + rgba);
     }
 
     public static synchronized Color defaultOutlineColor() {
         String rgb = config.getString("defaultOutlineColor", "0060ff");
         if (!rgbRegex.matcher(rgb).matches())
             rgb = "0060ff";
-        return BlueBridgeUtils.stringToColor(rgb);
+        return new Color("#" + rgb);
     }
 
     public static synchronized boolean debug() {

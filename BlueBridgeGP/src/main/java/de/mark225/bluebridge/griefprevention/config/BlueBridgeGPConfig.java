@@ -30,14 +30,14 @@ public class BlueBridgeGPConfig extends AddonConfig {
         String rgba = config.getString("adminFillColor", "96fd6600");
         if (!rgbaRegex.matcher(rgba).matches())
             rgba = "96fd6600";
-        return BlueBridgeUtils.stringToColor(rgba);
+        return new Color("#" + rgba);
     }
 
     public synchronized Color adminOutlineColor() {
         String rgb = config.getString("adminOutlineColor", "fd6600");
         if (!rgbRegex.matcher(rgb).matches())
             rgb = "fd6600";
-        return BlueBridgeUtils.stringToColor(rgb);
+        return new Color("#" + rgb);
     }
 
     public synchronized String adminDisplayName() {

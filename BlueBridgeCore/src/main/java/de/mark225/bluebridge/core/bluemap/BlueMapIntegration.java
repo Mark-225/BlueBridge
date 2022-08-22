@@ -17,9 +17,12 @@ import de.mark225.bluebridge.core.region.RegionSnapshot;
 import de.mark225.bluebridge.core.update.UpdateTask;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class BlueMapIntegration {
 
@@ -33,7 +36,10 @@ public class BlueMapIntegration {
             resetMarkers();
             UpdateTask.worlds.clear();
             UpdateTask.resetLastSnapshots();
-            UpdateTask.worlds.addAll(blueMapAPI.getWorlds().stream().map(blueMapWorld -> UUID.fromString(blueMapWorld.getId())).collect(Collectors.toList()));
+            for (World bukkitWorld : Bukkit.getWorlds()) {
+                UUID uuid = bukkitWorld.getUID();
+                blueMapAPI.getWorld(uuid).ifPresent(blueMapWorld -> UpdateTask.worlds.put(uuid, blueMapWorld));
+            }
             BlueBridgeCore.getInstance().addAllActiveRegions();
             BlueBridgeCore.getInstance().startUpdateTask();
         });
@@ -84,10 +90,8 @@ public class BlueMapIntegration {
         }
     }
 
-    private List<BlueMapMap> getMapsForWorld(UUID world) {
-        ArrayList<BlueMapMap> maps = new ArrayList<>();
-        blueMapAPI.getWorld(world).ifPresent(blueMapWorld -> maps.addAll(blueMapWorld.getMaps()));
-        return maps;
+    private Collection<BlueMapMap> getMapsForWorld(UUID world) {
+        return UpdateTask.worlds.get(world).getMaps();
     }
 
     private void addToMarkerSet(MarkerSet ms, BlueMapMap map, RegionSnapshot rs, Shape shape, Vector3d pos) {

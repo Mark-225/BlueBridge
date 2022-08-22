@@ -80,7 +80,6 @@ public class WorldGuardIntegration {
      * @return The List of region snapshots
      */
     public List<RegionSnapshot> getAllRegions(UUID worldUUID) {
-
         org.bukkit.World bukkitWorld = Bukkit.getWorld(worldUUID);
 
         if (bukkitWorld == null) {

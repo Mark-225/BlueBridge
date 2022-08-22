@@ -1,5 +1,6 @@
 package de.mark225.bluebridge.core.update;
 
+import de.bluecolored.bluemap.api.BlueMapWorld;
 import de.mark225.bluebridge.core.BlueBridgeCore;
 import de.mark225.bluebridge.core.addon.ActiveAddonEventHandler;
 import de.mark225.bluebridge.core.addon.AddonRegistry;
@@ -14,11 +15,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UpdateTask extends BukkitRunnable {
 
-    public static CopyOnWriteArrayList<UUID> worlds = new CopyOnWriteArrayList<>();
+    public static ConcurrentMap<UUID, BlueMapWorld> worlds = new ConcurrentHashMap<>();
 
     private static ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> lastSnapshots = new ConcurrentHashMap<>();
 
@@ -53,7 +53,7 @@ public class UpdateTask extends BukkitRunnable {
             @Override
             public void run() {
                 for (BlueBridgeAddon addon : addons) {
-                    for (UUID world : worlds) {
+                    for (UUID world : worlds.keySet()) {
                         ConcurrentMap<String, RegionSnapshot> worldSnapshots = addon.fetchSnapshots(world);
                         if (newSnapshots.containsKey(addon.name())) {
                             newSnapshots.get(addon.name()).putAll(worldSnapshots);

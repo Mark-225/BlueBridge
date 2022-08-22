@@ -3,7 +3,7 @@ markerSetName: "GriefPrevention Claims"
 # Edit these values to change admin claim colors:
 # Format: RRGGBB[AA] (only adminFillColor supports custom alpha values)
 adminOutlineColor: "fd6600"
-adminFillColor: "96fd6600"
+adminFillColor: "fd660096"
 # To Change user claim colors edit the default color values in BlueBridgeCore's config or overwrite them here by adding them manually
 
 # Sets the display name for admin regions

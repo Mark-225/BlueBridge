@@ -102,20 +102,14 @@ public class WorldGuardIntegration {
                 String color = pr.getFlag(COLOR_FLAG);
                 Color colorRGBA = null;
                 if (color != null && hexPatternRGBA.matcher(color).matches()) {
-                    int a, r, g, b;
-                    a = Integer.parseInt(color.substring(0, 2), 16);
-                    r = Integer.parseInt(color.substring(2, 4), 16);
-                    g = Integer.parseInt(color.substring(4, 6), 16);
-                    b = Integer.parseInt(color.substring(6, 8), 16);
-                    int rgba = (((((a << 8) + r) << 8) + g) << 8) + b;
-                    colorRGBA = new Color(rgba);
+                    colorRGBA = new Color("#" + color);
                 } else {
                     colorRGBA = BlueBridgeWGConfig.getInstance().defaultColor();
                 }
                 String bordercolor = pr.getFlag(OUTLINE_FLAG);
                 Color colorRGB = null;
                 if (bordercolor != null && hexPatternRGB.matcher(bordercolor).matches()) {
-                    colorRGB = new Color(Integer.parseInt(bordercolor, 16), 1);
+                    colorRGB = new Color("#" + bordercolor);
                 } else {
                     colorRGB = BlueBridgeWGConfig.getInstance().defaultOutlineColor();
                 }

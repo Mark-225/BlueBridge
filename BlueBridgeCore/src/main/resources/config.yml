@@ -20,9 +20,9 @@ minDistance: -1
 maxDistance: -1
 
 # If regions don't have an individual color and outline color set, you can configure the default values here.
-# defaultColor is in RGBA format (AARRGGBB)
+# defaultColor is in RGBA format (RRGGBBAA)
 # defaultColor is in RGB format (RRGGBB)
-defaultColor: "960087ff"
+defaultColor: "0087ff96"
 defaultOutlineColor: "0060ff"
 
 # Additionally to addon specific ways to configure these setting for each region individually, you can also configure default values

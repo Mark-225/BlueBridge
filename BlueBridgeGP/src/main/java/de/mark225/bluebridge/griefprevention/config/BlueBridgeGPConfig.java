@@ -2,7 +2,6 @@ package de.mark225.bluebridge.griefprevention.config;
 
 import de.bluecolored.bluemap.api.math.Color;
 import de.mark225.bluebridge.core.addon.AddonConfig;
-import de.mark225.bluebridge.core.util.BlueBridgeUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.regex.Pattern;

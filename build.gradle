@@ -11,10 +11,10 @@ subprojects {
 
     group 'de.mark225'
 
-    repositories{
+    repositories {
         mavenCentral()
         maven { url "https://jitpack.io" }
-        maven {url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"}
+        maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots" }
     }
 
     configurations {
@@ -26,13 +26,13 @@ subprojects {
         provided "org.bukkit:bukkit:1.13.2-R0.1-SNAPSHOT"
         provided 'com.flowpowered:flow-math:1.0.3'
     }
-    
-    tasks.withType(Jar){
+
+    tasks.withType(Jar) {
         destinationDirectory = file("$rootDir/build/target")
     }
 
-    processResources{
-        filesMatching('plugin.yml'){
+    processResources {
+        filesMatching('plugin.yml') {
             expand([gradleVersion: version, contributors: authors])
         }
     }

@@ -23,7 +23,7 @@ dependencies {
 
 tasks.build.dependsOn tasks.shadowJar
 
-jar{
+jar {
     archiveClassifier = 'NoDependencies'
 }
 

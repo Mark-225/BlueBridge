@@ -24,9 +24,9 @@ public class BlueMapIntegration {
 
     private BlueMapAPI blueMapAPI = null;
 
-    public void onEnable(BlueMapAPI blueMapAPI){
+    public void onEnable(BlueMapAPI blueMapAPI) {
         this.blueMapAPI = blueMapAPI;
-        Bukkit.getScheduler().runTask(BlueBridgeCore.getInstance(), () ->{
+        Bukkit.getScheduler().runTask(BlueBridgeCore.getInstance(), () -> {
             BlueBridgeCore.getInstance().updateConfig();
             BlueBridgeCore.getInstance().reloadAddons();
             resetMarkers();
@@ -38,14 +38,14 @@ public class BlueMapIntegration {
         });
     }
 
-    public void onDisable(BlueMapAPI blueMapApi){
+    public void onDisable(BlueMapAPI blueMapApi) {
         BlueBridgeCore.getInstance().stopUpdateTask();
     }
 
-    private void resetMarkers(){
-        for(BlueBridgeAddon addon : AddonRegistry.getAddons()){
-            for(UUID world : UpdateTask.worlds){
-                for(BlueMapMap map : getMapsForWorld(world)){
+    private void resetMarkers() {
+        for (BlueBridgeAddon addon : AddonRegistry.getAddons()) {
+            for (UUID world : UpdateTask.worlds) {
+                for (BlueMapMap map : getMapsForWorld(world)) {
                     map.getMarkerSets().put(getMarkerSetId(addon.name()), MarkerSet.builder()
                             .label(addon.markerSetName())
                             .defaultHidden(addon.defaultHide())
@@ -55,42 +55,42 @@ public class BlueMapIntegration {
         }
     }
 
-    private String getMarkerSetId(String addon){
+    private String getMarkerSetId(String addon) {
         return "!BlueBridge_RegionSet#" + addon;
     }
 
-    public void addOrUpdate(Collection<RegionSnapshot> regions){
-        for(RegionSnapshot rs : regions){
+    public void addOrUpdate(Collection<RegionSnapshot> regions) {
+        for (RegionSnapshot rs : regions) {
             Shape shape = new Shape(rs.getPoints().toArray(new Vector2d[0]));
             Vector2d midPoint2d = findMidpoint(rs.getPoints());
             Vector3d pos = new Vector3d(midPoint2d.getX(), rs.getHeight(), midPoint2d.getY());
-            for(BlueMapMap map : getMapsForWorld(rs.getWorld())){
+            for (BlueMapMap map : getMapsForWorld(rs.getWorld())) {
                 MarkerSet ms = map.getMarkerSets().get(getMarkerSetId(rs.getAddon()));
-                if(ms != null){
+                if (ms != null) {
                     addToMarkerSet(ms, map, rs, shape, pos);
                 }
             }
         }
     }
 
-    public void remove(Collection<RegionSnapshot> regions){
-        for(RegionSnapshot rs : regions){
-            for(BlueMapMap map : getMapsForWorld(rs.getWorld())){
-                for(Map.Entry<String, MarkerSet> entry : map.getMarkerSets().entrySet()){
+    public void remove(Collection<RegionSnapshot> regions) {
+        for (RegionSnapshot rs : regions) {
+            for (BlueMapMap map : getMapsForWorld(rs.getWorld())) {
+                for (Map.Entry<String, MarkerSet> entry : map.getMarkerSets().entrySet()) {
                     entry.getValue().getMarkers().remove(getGlobalRegionId(rs.getAddon(), rs.getId(), map.getId(), rs.getWorld().toString()));
                 }
             }
         }
     }
 
-    private List<BlueMapMap> getMapsForWorld(UUID world){
+    private List<BlueMapMap> getMapsForWorld(UUID world) {
         ArrayList<BlueMapMap> maps = new ArrayList<>();
         blueMapAPI.getWorld(world).ifPresent(blueMapWorld -> maps.addAll(blueMapWorld.getMaps()));
         return maps;
     }
 
-    private void addToMarkerSet(MarkerSet ms, BlueMapMap map, RegionSnapshot rs, Shape shape, Vector3d pos){
-        if(rs.isExtrude()){
+    private void addToMarkerSet(MarkerSet ms, BlueMapMap map, RegionSnapshot rs, Shape shape, Vector3d pos) {
+        if (rs.isExtrude()) {
             ExtrudeMarker em = ExtrudeMarker.builder()
                     .position(pos)
                     .shape(shape, rs.getHeight(), rs.getUpperHeight())
@@ -117,41 +117,41 @@ public class BlueMapIntegration {
         }
     }
 
-    private void defineDistances(DistanceRangedMarker dmr, RegionSnapshot rs){
+    private void defineDistances(DistanceRangedMarker dmr, RegionSnapshot rs) {
         final double minDistance = rs.getMinDistance();
         final double maxDistance = rs.getMaxDistance();
 
-        if(minDistance >= 0){
+        if (minDistance >= 0) {
             dmr.setMinDistance(minDistance);
         }
-        if(maxDistance > 0 && maxDistance > minDistance){
+        if (maxDistance > 0 && maxDistance > minDistance) {
             dmr.setMaxDistance(maxDistance);
         }
     }
 
-    private String getGlobalRegionId(String addon, String region, String mapId, String worldId){
+    private String getGlobalRegionId(String addon, String region, String mapId, String worldId) {
         return "!BlueBridge_RegionMarker#" + addon + "_" + worldId + "/" + mapId + ":" + region;
     }
 
-    private Vector2d findMidpoint(List<Vector2d> polygon){
+    private Vector2d findMidpoint(List<Vector2d> polygon) {
         double minX = 0;
         double maxX = 0;
         double minY = 0;
         double maxY = 0;
-        if(polygon.size() >= 0){
+        if (polygon.size() >= 0) {
             Vector2d first = polygon.get(0);
             minX = first.getX();
             maxX = first.getX();
             minY = first.getY();
             maxY = first.getY();
-            for(Vector2d vector : polygon){
-                if(vector.getX() < minX)
+            for (Vector2d vector : polygon) {
+                if (vector.getX() < minX)
                     minX = vector.getX();
-                if(vector.getX() > maxX)
+                if (vector.getX() > maxX)
                     maxX = vector.getX();
-                if(vector.getY() < minY)
+                if (vector.getY() < minY)
                     minY = vector.getY();
-                if(vector.getY() > maxY)
+                if (vector.getY() > maxY)
                     maxY = vector.getY();
             }
         }

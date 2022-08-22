@@ -43,9 +43,10 @@ public class WorldGuardIntegration {
 
     /**
      * Initializes the Worldguard integration and registers the custom flags. Can only be called once during {@link org.bukkit.plugin.java.JavaPlugin#onLoad()}
+     *
      * @return true if the registration of custom flags was successful
      */
-    public boolean init(){
+    public boolean init() {
         //register custom flags
         FlagRegistry flags = WorldGuard.getInstance().getFlagRegistry();
         try {
@@ -65,7 +66,7 @@ public class WorldGuardIntegration {
             DISPLAY_FLAG = displayFlag;
             DEPTH_CHECK_FLAG = depthCheckFlag;
             return true;
-        }catch(FlagConflictException e){
+        } catch (FlagConflictException e) {
             BlueBridgeWG.getInstance().getLogger().severe("Custom Worldguard flags are conflicting with another plugin!");
         }
         return false;
@@ -74,14 +75,15 @@ public class WorldGuardIntegration {
     /**
      * Iterates through all Worldguard regions of a given world, filters out regions that can't be rendered or
      * are configured to not be rendered on Bluemap and returns them as seperate {@link RegionSnapshot} objects.
+     *
      * @param worldUUID
      * @return The List of region snapshots
      */
-    public List<RegionSnapshot> getAllRegions(UUID worldUUID){
+    public List<RegionSnapshot> getAllRegions(UUID worldUUID) {
 
         org.bukkit.World bukkitWorld = Bukkit.getWorld(worldUUID);
 
-        if(bukkitWorld == null){
+        if (bukkitWorld == null) {
             BlueBridgeWG.getInstance().getLogger().warning("World " + worldUUID.toString() + " not found! Please check your Bluemap config for invalid worlds!");
             return new ArrayList<RegionSnapshot>();
         }
@@ -89,7 +91,7 @@ public class WorldGuardIntegration {
         World w = BukkitAdapter.adapt(bukkitWorld);
         RegionContainer regions = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager rm = regions.get(w);
-        if(rm != null){
+        if (rm != null) {
             return rm.getRegions().values().stream().filter(pr -> {
                 //filter all regions that shall not be rendered
                 StateFlag.State state = pr.getFlag(RENDER_FLAG);
@@ -100,7 +102,7 @@ public class WorldGuardIntegration {
                 //Convert color flags to Color Objects, if applicable
                 String color = pr.getFlag(COLOR_FLAG);
                 Color colorRGBA = null;
-                if(color != null && hexPatternRGBA.matcher(color).matches()){
+                if (color != null && hexPatternRGBA.matcher(color).matches()) {
                     int a, r, g, b;
                     a = Integer.parseInt(color.substring(0, 2), 16);
                     r = Integer.parseInt(color.substring(2, 4), 16);
@@ -113,7 +115,7 @@ public class WorldGuardIntegration {
                 }
                 String bordercolor = pr.getFlag(OUTLINE_FLAG);
                 Color colorRGB = null;
-                if(bordercolor != null && hexPatternRGB.matcher(bordercolor).matches()){
+                if (bordercolor != null && hexPatternRGB.matcher(bordercolor).matches()) {
                     colorRGB = new Color(Integer.parseInt(bordercolor, 16), 1);
                 } else {
                     colorRGB = BlueBridgeWGConfig.getInstance().defaultOutlineColor();
@@ -133,7 +135,7 @@ public class WorldGuardIntegration {
                         .setShortName(pr.getId())
                         .setHeight(extrude ? pr.getMinimumPoint().getBlockY() : height)
                         .setExtrude(extrude)
-                        .setUpperHeight(pr.getMaximumPoint().getBlockY() +1)
+                        .setUpperHeight(pr.getMaximumPoint().getBlockY() + 1)
                         .setDepthCheck(depthCheck)
                         .setColor(colorRGBA)
                         .setBorderColor(colorRGB)
@@ -143,19 +145,19 @@ public class WorldGuardIntegration {
         return Collections.emptyList();
     }
 
-    private String parseHtmlDisplay(ProtectedRegion region){
+    private String parseHtmlDisplay(ProtectedRegion region) {
         return BlueBridgeUtils.replace(new RegionStringLookup(region), BlueBridgeWGConfig.getInstance().htmlPreset());
     }
 
-    private List<Vector2d> getPointsForRegion(ProtectedRegion region){
-        if(region instanceof ProtectedCuboidRegion){
+    private List<Vector2d> getPointsForRegion(ProtectedRegion region) {
+        if (region instanceof ProtectedCuboidRegion) {
             BlockVector3 blockVectorMin = region.getMinimumPoint();
             BlockVector3 blockVectorMax = region.getMaximumPoint();
             Vector2d min = new Vector2d(blockVectorMin.getX(), blockVectorMin.getZ());
             Vector2d max = new Vector2d(blockVectorMax.getX(), blockVectorMax.getZ());
             List<Vector2d> list = new ArrayList<>();
             list.add(min);
-            list.add(new Vector2d(max.getX() +1, min.getY()));
+            list.add(new Vector2d(max.getX() + 1, min.getY()));
             list.add(new Vector2d(max.getX() + 1, max.getY() + 1));
             list.add(new Vector2d(min.getX(), max.getY() + 1));
             return list;
@@ -163,10 +165,10 @@ public class WorldGuardIntegration {
         return region.getPoints().stream().map(bv2 -> new Vector2d(bv2.getX() + 0.5, bv2.getZ() + 0.5)).collect(Collectors.toList());
     }
 
-    private int polygonArea(List<BlockVector2> coordinates){
+    private int polygonArea(List<BlockVector2> coordinates) {
         int size = coordinates.size();
         int sum = 0;
-        for(int i = 0; i < size; i++){
+        for (int i = 0; i < size; i++) {
             sum += (coordinates.get(i).getX() * coordinates.get((i + 1) % size).getZ()) - (coordinates.get(i).getZ() * coordinates.get((i + 1) % size).getX());
         }
         return Math.abs((int) ((double) sum / 2d));

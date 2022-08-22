@@ -4,9 +4,9 @@ import org.apache.commons.text.lookup.StringLookup;
 
 public abstract class StringLookupWrapper {
 
-    public final StringLookup lookup = new StringLookup(){
+    public final StringLookup lookup = new StringLookup() {
         @Override
-        public String lookup(String key){
+        public String lookup(String key) {
             return replace(key);
         }
     };

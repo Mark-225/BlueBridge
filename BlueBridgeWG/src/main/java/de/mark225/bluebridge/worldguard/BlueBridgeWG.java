@@ -12,20 +12,20 @@ public class BlueBridgeWG extends JavaPlugin {
     private static BlueBridgeWGAddon addon;
     private WorldGuardIntegration integration;
 
-    public static BlueBridgeWG getInstance(){
+    public static BlueBridgeWG getInstance() {
         return instance;
     }
 
-    public WorldGuardIntegration getWGIntegration(){
+    public WorldGuardIntegration getWGIntegration() {
         return integration;
     }
 
-    public BlueBridgeWGAddon getAddon(){
+    public BlueBridgeWGAddon getAddon() {
         return addon;
     }
 
     @Override
-    public void onLoad(){
+    public void onLoad() {
         instance = this;
         updateConfig();
         integration = new WorldGuardIntegration();
@@ -34,7 +34,7 @@ public class BlueBridgeWG extends JavaPlugin {
         AddonRegistry.register(addon);
     }
 
-    public void updateConfig(){
+    public void updateConfig() {
         saveDefaultConfig();
         reloadConfig();
         new BlueBridgeWGConfig(getConfig());

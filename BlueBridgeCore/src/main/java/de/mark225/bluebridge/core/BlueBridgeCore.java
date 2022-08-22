@@ -16,57 +16,57 @@ public class BlueBridgeCore extends JavaPlugin {
 
     private BlueMapIntegration blueMapIntegration;
 
-    public static BlueBridgeCore getInstance(){
+    public static BlueBridgeCore getInstance() {
         return instance;
     }
 
     @Override
-    public void onLoad(){
+    public void onLoad() {
         instance = this;
         AddonRegistry.clear();
         updateConfig();
     }
 
     @Override
-    public void onEnable(){
+    public void onEnable() {
         blueMapIntegration = new BlueMapIntegration();
         BlueMapAPI.onEnable(blueMapIntegration::onEnable);
         BlueMapAPI.onDisable(blueMapIntegration::onDisable);
     }
 
 
-    public void updateConfig(){
+    public void updateConfig() {
         saveDefaultConfig();
         reloadConfig();
         BlueBridgeConfig.setConfig(getConfig());
     }
 
-    public void reloadAddons(){
+    public void reloadAddons() {
         AddonRegistry.getAddons().forEach(BlueBridgeAddon::reload);
     }
 
-    public synchronized void startUpdateTask(){
+    public synchronized void startUpdateTask() {
         UpdateTask.setLocked(false);
         UpdateTask.createAndSchedule(true);
     }
 
-    public void addAllActiveRegions(){
-        for(BlueBridgeAddon addon : AddonRegistry.getIfActive(true)){
-            for(UUID world : UpdateTask.worlds){
+    public void addAllActiveRegions() {
+        for (BlueBridgeAddon addon : AddonRegistry.getIfActive(true)) {
+            for (UUID world : UpdateTask.worlds) {
                 blueMapIntegration.addOrUpdate(addon.fetchSnapshots(world).values());
             }
         }
     }
 
-    public synchronized void reschedule(){
+    public synchronized void reschedule() {
         UpdateTask.createAndSchedule(false);
     }
 
-    public synchronized void stopUpdateTask(){
+    public synchronized void stopUpdateTask() {
         UpdateTask.setLocked(true);
     }
 
-    public BlueMapIntegration getBlueMapIntegration(){
+    public BlueMapIntegration getBlueMapIntegration() {
         return blueMapIntegration;
     }
 

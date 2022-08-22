@@ -1,9 +1,8 @@
 package de.mark225.bluebridge.core.util;
 
+import de.bluecolored.bluemap.api.math.Color;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.text.StringSubstitutor;
-
-import java.awt.*;
 
 public class BlueBridgeUtils {
 
@@ -16,7 +15,7 @@ public class BlueBridgeUtils {
     }
 
     public static Color stringToColor(String hex){
-        switch (hex.length()) {
+        switch (hex.length()){
             case 6:
                 return new Color(
                         Integer.valueOf(hex.substring(0, 2), 16),
@@ -30,5 +29,12 @@ public class BlueBridgeUtils {
                         Integer.valueOf(hex.substring(0, 2), 16));
         }
         return null;
+    }
+
+    public static int colorToInt(Color color){
+        return (((int) (color.getAlpha() * 255) & 0xFF) << 24) |
+                ((color.getRed() & 0xFF) << 16) |
+                ((color.getGreen() & 0xFF) << 8)  |
+                ((color.getBlue() & 0xFF));
     }
 }

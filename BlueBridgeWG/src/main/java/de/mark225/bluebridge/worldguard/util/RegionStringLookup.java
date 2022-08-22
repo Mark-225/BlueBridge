@@ -33,7 +33,7 @@ public class RegionStringLookup extends StringLookupWrapper {
 
 
     @Override
-    public String replace(String key) {
+    public String replace(String key){
         if(cache.containsKey(key))
             return cache.get(key);
         String result = fetch(key);
@@ -44,29 +44,29 @@ public class RegionStringLookup extends StringLookupWrapper {
     private String fetch(String key){
         String[] args = key.split(":");
         if(args.length > 0){
-            switch (args[0]) {
+            switch (args[0]){
                 case "name":
                     if(args.length == 2)
                         return getName(Boolean.parseBoolean(args[1]));
                     return getName(false);
                 case "owners":
-                    if (args.length == 2) {
+                    if(args.length == 2){
                         return getOwners(args[1], 10);
-                    } else if (args.length == 3) {
+                    } else if(args.length == 3){
                         try {
                             return getOwners(args[1], Integer.parseInt(args[2]));
-                        } catch (NumberFormatException e) {
+                        } catch (NumberFormatException e){
                             return "[Invalid placeholder syntax]";
                         }
                     }
                     break;
                 case "members":
-                    if (args.length == 2) {
+                    if(args.length == 2){
                         return getMembers(args[1], 10);
-                    } else if (args.length == 3) {
+                    } else if(args.length == 3){
                         try {
                             return getMembers(args[1], Integer.parseInt(args[2]));
-                        } catch (NumberFormatException e) {
+                        } catch (NumberFormatException e){
                             return "[Invalid placeholder syntax]";
                         }
                     }

@@ -1,8 +1,8 @@
 package de.mark225.bluebridge.core.region;
 
 import com.flowpowered.math.vector.Vector2d;
+import de.bluecolored.bluemap.api.math.Color;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -21,8 +21,8 @@ public class RegionSnapshot {
     private float upperHeight = 0;
     private boolean depthCheck = false;
     private List<Vector2d> points;
-    private Color color = Color.BLACK;
-    private Color borderColor = Color.BLACK;
+    private Color color = new Color(0, 0, 0);
+    private Color borderColor = new Color(0, 0, 0);
     private double minDistance;
     private double maxDistance;
 
@@ -37,11 +37,11 @@ public class RegionSnapshot {
         return addon;
     }
 
-    public String getId() {
+    public String getId(){
         return id;
     }
 
-    public float getHeight() {
+    public float getHeight(){
         return height;
     }
 
@@ -53,91 +53,91 @@ public class RegionSnapshot {
         return upperHeight;
     }
 
-    public boolean getDepthCheck() {
+    public boolean getDepthCheck(){
         return depthCheck;
     }
 
-    public String getHtmlDisplay() {
+    public String getHtmlDisplay(){
         return htmlDisplay;
     }
 
-    public String getShortName() {
+    public String getShortName(){
         return shortName;
     }
 
-    public UUID getWorld() {
+    public UUID getWorld(){
         return world;
     }
 
-    public List<Vector2d> getPoints() {
+    public List<Vector2d> getPoints(){
         return points;
     }
 
-    public Color getColor() {
+    public Color getColor(){
         return color;
     }
 
-    public Color getBorderColor() {
+    public Color getBorderColor(){
         return borderColor;
     }
 
-    public double getMinDistance() {
+    public double getMinDistance(){
         return minDistance;
     }
 
-    public double getMaxDistance() {
+    public double getMaxDistance(){
         return maxDistance;
     }
 
-    public void setHtmlDisplay(String htmlDisplay) {
+    public void setHtmlDisplay(String htmlDisplay){
         this.htmlDisplay = htmlDisplay;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode(){
         return Objects.hash(getAddon(), getId(), getHtmlDisplay(), getShortName(), getWorld(), getHeight(), isExtrude(), getUpperHeight(), getDepthCheck(), getPoints(), getColor(), getBorderColor(), getMinDistance(), getMaxDistance());
     }
 
-    public void setShortName(String shortName) {
+    public void setShortName(String shortName){
         this.shortName = shortName;
     }
 
-    public void setHeight(float height) {
+    public void setHeight(float height){
         this.height = height;
     }
 
-    public void setExtrude(boolean extrude) {
+    public void setExtrude(boolean extrude){
         this.extrude = extrude;
     }
 
-    public void setUpperHeight(float upperHeight) {
+    public void setUpperHeight(float upperHeight){
         this.upperHeight = upperHeight;
     }
 
-    public void setDepthCheck(boolean depthCheck) {
+    public void setDepthCheck(boolean depthCheck){
         this.depthCheck = depthCheck;
     }
 
-    public void setColor(Color color) {
+    public void setColor(Color color){
         this.color = color;
     }
 
-    public void setBorderColor(Color borderColor) {
+    public void setBorderColor(Color borderColor){
         this.borderColor = borderColor;
     }
 
-    public void setMinDistance(double minDistance) {
+    public void setMinDistance(double minDistance){
         this.minDistance = minDistance;
     }
 
-    public void setMaxDistance(double maxDistance) {
+    public void setMaxDistance(double maxDistance){
         this.maxDistance = maxDistance;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof RegionSnapshot)) return false;
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if(!(o instanceof RegionSnapshot)) return false;
         RegionSnapshot that = (RegionSnapshot) o;
         return Float.compare(that.getHeight(), getHeight()) == 0 &&
                 isExtrude() == that.isExtrude() &&

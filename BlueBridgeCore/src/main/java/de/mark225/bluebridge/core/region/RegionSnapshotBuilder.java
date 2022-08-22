@@ -1,11 +1,10 @@
 package de.mark225.bluebridge.core.region;
 
 import com.flowpowered.math.vector.Vector2d;
+import de.bluecolored.bluemap.api.math.Color;
 import de.mark225.bluebridge.core.addon.AddonConfig;
 import de.mark225.bluebridge.core.addon.BlueBridgeAddon;
-import de.mark225.bluebridge.core.config.BlueBridgeConfig;
 
-import java.awt.*;
 import java.util.List;
 import java.util.UUID;
 

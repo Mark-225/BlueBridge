@@ -1,11 +1,10 @@
 package de.mark225.bluebridge.core.addon;
 
+import de.bluecolored.bluemap.api.math.Color;
 import de.mark225.bluebridge.core.config.BlueBridgeConfig;
 import de.mark225.bluebridge.core.util.BlueBridgeUtils;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.awt.*;
 import java.util.regex.Pattern;
 
 public abstract class AddonConfig {
@@ -30,11 +29,11 @@ public abstract class AddonConfig {
         return config.getInt("renderHeight", BlueBridgeConfig.renderHeight());
     }
 
-    public synchronized double minDistance() {
+    public synchronized double minDistance(){
         return config.getDouble("minDistance", BlueBridgeConfig.minDistance());
     }
 
-    public synchronized double maxDistance() {
+    public synchronized double maxDistance(){
         return config.getDouble("maxDistance", BlueBridgeConfig.maxDistance());
     }
 

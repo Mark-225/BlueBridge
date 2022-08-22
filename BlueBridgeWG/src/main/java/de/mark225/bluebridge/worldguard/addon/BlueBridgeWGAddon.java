@@ -13,27 +13,27 @@ import java.util.stream.Collectors;
 
 public class BlueBridgeWGAddon extends BlueBridgeAddon {
     @Override
-    public String name() {
+    public String name(){
         return "BlueBridgeWG";
     }
 
     @Override
-    public AddonConfig addonConfig() {
+    public AddonConfig addonConfig(){
         return BlueBridgeWGConfig.getInstance();
     }
 
     @Override
-    public String markerSetName() {
+    public String markerSetName(){
         return BlueBridgeWGConfig.getInstance().markerSetName();
     }
 
     @Override
-    public boolean defaultHide() {
+    public boolean defaultHide(){
         return BlueBridgeWGConfig.getInstance().defaultHideSets();
     }
 
     @Override
-    public ConcurrentMap<String, RegionSnapshot> fetchSnapshots(UUID world) {
+    public ConcurrentMap<String, RegionSnapshot> fetchSnapshots(UUID world){
         WorldGuardIntegration integration = BlueBridgeWG.getInstance().getWGIntegration();
         if(integration != null){
             return integration.getAllRegions(world).stream().collect(Collectors.toConcurrentMap(RegionSnapshot::getId, rs -> rs));
@@ -42,12 +42,12 @@ public class BlueBridgeWGAddon extends BlueBridgeAddon {
     }
 
     @Override
-    public void reload() {
+    public void reload(){
         BlueBridgeWG.getInstance().updateConfig();
     }
 
     @Override
-    public boolean isActiveAddon() {
+    public boolean isActiveAddon(){
         return false;
     }
 }

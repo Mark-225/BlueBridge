@@ -1,6 +1,7 @@
 package de.mark225.bluebridge.griefprevention.addon;
 
 import com.flowpowered.math.vector.Vector2d;
+import de.bluecolored.bluemap.api.math.Color;
 import de.mark225.bluebridge.core.addon.ActiveAddonEventHandler;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
 import de.mark225.bluebridge.core.region.RegionSnapshotBuilder;
@@ -12,9 +13,10 @@ import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import me.ryanhamshire.GriefPrevention.util.BoundingBox;
 import org.bukkit.Bukkit;
 
-import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

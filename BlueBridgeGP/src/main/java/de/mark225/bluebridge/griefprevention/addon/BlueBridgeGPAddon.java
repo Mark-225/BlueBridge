@@ -12,37 +12,37 @@ import java.util.stream.Collectors;
 
 public class BlueBridgeGPAddon extends BlueBridgeAddon {
     @Override
-    public String name() {
+    public String name(){
         return "BlueBridgeGP";
     }
 
     @Override
-    public AddonConfig addonConfig() {
+    public AddonConfig addonConfig(){
         return BlueBridgeGPConfig.getInstance();
     }
 
     @Override
-    public String markerSetName() {
+    public String markerSetName(){
         return BlueBridgeGPConfig.getInstance().markerSetName();
     }
 
     @Override
-    public boolean defaultHide() {
+    public boolean defaultHide(){
         return BlueBridgeGPConfig.getInstance().defaultHideSets();
     }
 
     @Override
-    public ConcurrentMap<String, RegionSnapshot> fetchSnapshots(UUID world) {
+    public ConcurrentMap<String, RegionSnapshot> fetchSnapshots(UUID world){
         return BlueBridgeGP.getInstance().getGPIntegration().getAllClaims(world).stream().collect(Collectors.toConcurrentMap(RegionSnapshot::getId, rs -> rs));
     }
 
     @Override
-    public void reload() {
+    public void reload(){
         BlueBridgeGP.getInstance().updateConfig();
     }
 
     @Override
-    public boolean isActiveAddon() {
+    public boolean isActiveAddon(){
         return true;
     }
 }

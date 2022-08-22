@@ -1,6 +1,5 @@
 package de.mark225.bluebridge.core.update;
 
-import de.bluecolored.bluemap.api.marker.MarkerAPI;
 import de.mark225.bluebridge.core.BlueBridgeCore;
 import de.mark225.bluebridge.core.addon.ActiveAddonEventHandler;
 import de.mark225.bluebridge.core.addon.AddonRegistry;
@@ -10,15 +9,12 @@ import de.mark225.bluebridge.core.config.BlueBridgeConfig;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class UpdateTask extends BukkitRunnable {
 
@@ -50,14 +46,14 @@ public class UpdateTask extends BukkitRunnable {
     }
 
     @Override
-    public void run() {
+    public void run(){
         List<BlueBridgeAddon> addons = AddonRegistry.getIfActive(false);
         ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> newSnapshots = new ConcurrentHashMap<>();
-        new BukkitRunnable() {
+        new BukkitRunnable(){
                 @Override
-                public void run() {
+                public void run(){
                     for(BlueBridgeAddon addon : addons){
-                        for(UUID world : worlds) {
+                        for(UUID world : worlds){
                             ConcurrentMap<String, RegionSnapshot> worldSnapshots = addon.fetchSnapshots(world);
                             if(newSnapshots.containsKey(addon.name())){
                                 newSnapshots.get(addon.name()).putAll(worldSnapshots);
@@ -71,10 +67,10 @@ public class UpdateTask extends BukkitRunnable {
         }.runTaskAsynchronously(BlueBridgeCore.getInstance());
     }
 
-    private void doSyncUpdate(BlueMapIntegration integration, MarkerAPI api){
+    private void doSyncUpdate(BlueMapIntegration integration){
         ActiveAddonEventHandler.collectAndReset((addedOrUpdated, deleted) ->{
-            integration.addOrUpdate(addedOrUpdated, api);
-            integration.remove(deleted, api);
+            integration.addOrUpdate(addedOrUpdated);
+            integration.remove(deleted);
         });
     }
 
@@ -107,32 +103,9 @@ public class UpdateTask extends BukkitRunnable {
             }
         });
         BlueMapIntegration integration = BlueBridgeCore.getInstance().getBlueMapIntegration();
-        MarkerAPI api = integration.loadMarkerAPI();
-        integration.addOrUpdate(addedOrUpdated, api);
-        integration.remove(removed, api);
-        doSyncUpdate(integration, api);
-        //"Workaround" for very rare exceptions while saving by retrying up to two times
-        Logger logger = BlueBridgeCore.getInstance().getLogger();
-        int retries = 3;
-        while (retries > 0) {
-            try {
-                api.save();
-                break;
-            } catch (IOException e) {
-                e.printStackTrace();
-                retries--;
-                if(retries > 0 ){
-                    logger.log(Level.INFO, "BlueBridge save attempt failed. Retrying in 0.5 seconds");
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException interruptedException) {
-                        interruptedException.printStackTrace();
-                    }
-                }else{
-                    logger.log(Level.WARNING, "BlueBridge Marker save failed after 3 attempts. Some markers might be out of sync with their respective regions.");
-                }
-            }
-        }
+        integration.addOrUpdate(addedOrUpdated);
+        integration.remove(removed);
+        doSyncUpdate(integration);
         lastSnapshots = newSnapshots;
         reschedule();
     }

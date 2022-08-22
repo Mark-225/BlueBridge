@@ -16,6 +16,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import de.bluecolored.bluemap.api.math.Color;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
 import de.mark225.bluebridge.core.region.RegionSnapshotBuilder;
 import de.mark225.bluebridge.core.util.BlueBridgeUtils;
@@ -24,9 +25,7 @@ import de.mark225.bluebridge.worldguard.config.BlueBridgeWGConfig;
 import de.mark225.bluebridge.worldguard.util.RegionStringLookup;
 import org.bukkit.Bukkit;
 
-import java.awt.*;
 import java.util.*;
-import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -54,8 +53,8 @@ public class WorldGuardIntegration {
             StateFlag depthCheckFlag = new StateFlag("bluemap-depth-check", false);
             IntegerFlag heightFlag = new IntegerFlag("bluemap-render-height");
             StateFlag extrudeFlag = new StateFlag("bluemap-extrude", false);
-            StringFlag colorFlag = new StringFlag("bluemap-color", Integer.toHexString(BlueBridgeWGConfig.getInstance().defaultColor().getRGB()));
-            StringFlag outlineFlag = new StringFlag("bluemap-color-outline", Integer.toHexString(BlueBridgeWGConfig.getInstance().defaultOutlineColor().getRGB()).substring(2));
+            StringFlag colorFlag = new StringFlag("bluemap-color", Integer.toHexString(BlueBridgeUtils.colorToInt(BlueBridgeWGConfig.getInstance().defaultColor())));
+            StringFlag outlineFlag = new StringFlag("bluemap-color-outline", Integer.toHexString(BlueBridgeUtils.colorToInt(BlueBridgeWGConfig.getInstance().defaultOutlineColor())).substring(2));
             StringFlag displayFlag = new StringFlag("bluemap-display");
             flags.registerAll(Arrays.asList(new Flag[]{renderFlag, depthCheckFlag, heightFlag, extrudeFlag, colorFlag, outlineFlag, displayFlag}));
             RENDER_FLAG = renderFlag;
@@ -90,7 +89,7 @@ public class WorldGuardIntegration {
         World w = BukkitAdapter.adapt(bukkitWorld);
         RegionContainer regions = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager rm = regions.get(w);
-        if(rm != null) {
+        if(rm != null){
             return rm.getRegions().values().stream().filter(pr -> {
                 //filter all regions that shall not be rendered
                 StateFlag.State state = pr.getFlag(RENDER_FLAG);
@@ -101,21 +100,21 @@ public class WorldGuardIntegration {
                 //Convert color flags to Color Objects, if applicable
                 String color = pr.getFlag(COLOR_FLAG);
                 Color colorRGBA = null;
-                if (color != null && hexPatternRGBA.matcher(color).matches()) {
+                if(color != null && hexPatternRGBA.matcher(color).matches()){
                     int a, r, g, b;
                     a = Integer.parseInt(color.substring(0, 2), 16);
                     r = Integer.parseInt(color.substring(2, 4), 16);
                     g = Integer.parseInt(color.substring(4, 6), 16);
                     b = Integer.parseInt(color.substring(6, 8), 16);
                     int rgba = (((((a << 8) + r) << 8) + g) << 8) + b;
-                    colorRGBA = new Color(rgba, true);
+                    colorRGBA = new Color(rgba);
                 } else {
                     colorRGBA = BlueBridgeWGConfig.getInstance().defaultColor();
                 }
                 String bordercolor = pr.getFlag(OUTLINE_FLAG);
                 Color colorRGB = null;
-                if (bordercolor != null && hexPatternRGB.matcher(bordercolor).matches()) {
-                    colorRGB = new Color(Integer.parseInt(bordercolor, 16), false);
+                if(bordercolor != null && hexPatternRGB.matcher(bordercolor).matches()){
+                    colorRGB = new Color(Integer.parseInt(bordercolor, 16), 1);
                 } else {
                     colorRGB = BlueBridgeWGConfig.getInstance().defaultOutlineColor();
                 }

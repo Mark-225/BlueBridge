@@ -49,11 +49,11 @@ DEFAULT_JVM_OPTS='"-Xmx64m" "-Xms64m"'
 # Use the maximum available, or set MAX_FD != -1 to use that value.
 MAX_FD="maximum"
 
-warn () {
+warn (){
     echo "$*"
 }
 
-die () {
+die (){
     echo
     echo "$*"
     echo
@@ -173,7 +173,7 @@ if [ "$cygwin" = "true" -o "$msys" = "true" ] ; then
 fi
 
 # Escape application args
-save () {
+save (){
     for i do printf %s\\n "$i" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/' \\\\/" ; done
     echo " "
 }

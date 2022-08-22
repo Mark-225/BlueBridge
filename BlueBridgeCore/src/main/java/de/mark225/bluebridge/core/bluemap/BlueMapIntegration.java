@@ -4,6 +4,7 @@ import com.flowpowered.math.vector.Vector2d;
 import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapMap;
+import de.bluecolored.bluemap.api.BlueMapWorld;
 import de.bluecolored.bluemap.api.markers.DistanceRangedMarker;
 import de.bluecolored.bluemap.api.markers.ExtrudeMarker;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
@@ -44,8 +45,8 @@ public class BlueMapIntegration {
 
     private void resetMarkers() {
         for (BlueBridgeAddon addon : AddonRegistry.getAddons()) {
-            for (UUID world : UpdateTask.worlds) {
-                for (BlueMapMap map : getMapsForWorld(world)) {
+            for (BlueMapWorld world : blueMapAPI.getWorlds()) {
+                for (BlueMapMap map : world.getMaps()) {
                     map.getMarkerSets().put(getMarkerSetId(addon.name()), MarkerSet.builder()
                             .label(addon.markerSetName())
                             .defaultHidden(addon.defaultHide())

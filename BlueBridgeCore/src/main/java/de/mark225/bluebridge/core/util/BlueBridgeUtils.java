@@ -26,7 +26,7 @@ public class BlueBridgeUtils {
                         Integer.valueOf(hex.substring(2, 4), 16),
                         Integer.valueOf(hex.substring(4, 6), 16),
                         Integer.valueOf(hex.substring(6, 8), 16),
-                        Integer.valueOf(hex.substring(0, 2), 16));
+                        (float) Integer.valueOf(hex.substring(0, 2), 16) / 255);
         }
         return null;
     }

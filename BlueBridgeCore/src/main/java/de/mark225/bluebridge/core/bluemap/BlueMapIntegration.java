@@ -138,22 +138,20 @@ public class BlueMapIntegration {
         double maxX = 0;
         double minY = 0;
         double maxY = 0;
-        if (polygon.size() >= 0) {
-            Vector2d first = polygon.get(0);
-            minX = first.getX();
-            maxX = first.getX();
-            minY = first.getY();
-            maxY = first.getY();
-            for (Vector2d vector : polygon) {
-                if (vector.getX() < minX)
-                    minX = vector.getX();
-                if (vector.getX() > maxX)
-                    maxX = vector.getX();
-                if (vector.getY() < minY)
-                    minY = vector.getY();
-                if (vector.getY() > maxY)
-                    maxY = vector.getY();
-            }
+        Vector2d first = polygon.get(0);
+        minX = first.getX();
+        maxX = first.getX();
+        minY = first.getY();
+        maxY = first.getY();
+        for (Vector2d vector : polygon) {
+            if (vector.getX() < minX)
+                minX = vector.getX();
+            if (vector.getX() > maxX)
+                maxX = vector.getX();
+            if (vector.getY() < minY)
+                minY = vector.getY();
+            if (vector.getY() > maxY)
+                maxY = vector.getY();
         }
         return new Vector2d(minX + ((maxX - minX) / 2d), minY + ((maxY - minY) / 2d));
     }

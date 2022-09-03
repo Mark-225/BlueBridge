@@ -5,9 +5,11 @@ import de.bluecolored.bluemap.api.math.Color;
 import de.mark225.bluebridge.core.addon.ActiveAddonEventHandler;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
 import de.mark225.bluebridge.core.region.RegionSnapshotBuilder;
+import de.mark225.bluebridge.core.util.BlueBridgeUtils;
 import de.mark225.bluebridge.griefprevention.BlueBridgeGP;
 import de.mark225.bluebridge.griefprevention.addon.listener.GriefPreventionListener;
 import de.mark225.bluebridge.griefprevention.config.BlueBridgeGPConfig;
+import de.mark225.bluebridge.griefprevention.util.ClaimStringLookup;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import me.ryanhamshire.GriefPrevention.util.BoundingBox;
@@ -50,7 +52,8 @@ public class GriefPreventionIntegration {
 
         BoundingBox boundingBox = trimmedBoundingBox(claim);
         List<Vector2d> points = boundingBoxToPolyCorners(boundingBox);
-        String label = claim.isAdminClaim() ? BlueBridgeGPConfig.getInstance().adminDisplayName() : claim.getOwnerName() + "'s Claim";
+        String shortName = claim.isAdminClaim() ? BlueBridgeGPConfig.getInstance().adminDisplayName() : claim.getOwnerName() + "'s Claim";
+        String label = BlueBridgeUtils.replace(new ClaimStringLookup(claim), BlueBridgeGPConfig.getInstance().htmlDisplay());
         int claimFloor = claim.getLesserBoundaryCorner().getBlockY();
         int claimCeiling = claim.getGreaterBoundaryCorner().getWorld().getMaxHeight();
         boolean extrude = BlueBridgeGPConfig.getInstance().defaultExtrude();
@@ -66,7 +69,7 @@ public class GriefPreventionIntegration {
 
         return new RegionSnapshotBuilder(BlueBridgeGP.getInstance().getAddon(), claim.getID().toString(), points, claim.getLesserBoundaryCorner().getWorld().getUID())
                 .setHtmlDisplay(label)
-                .setShortName(label)
+                .setShortName(shortName)
                 .setHeight(extrude ? claimFloor : (float) BlueBridgeGPConfig.getInstance().renderHeight() + heightModifier)
                 .setExtrude(extrude)
                 .setUpperHeight(claimCeiling)

@@ -46,4 +46,8 @@ public class BlueBridgeGPConfig extends AddonConfig {
     public synchronized boolean layerChildren() {
         return config.getBoolean("layerChildren", true);
     }
+
+    public synchronized String htmlDisplay() {
+        return config.getString("htmlPreset", "<span>${owner}'s Claim");
+    }
 }

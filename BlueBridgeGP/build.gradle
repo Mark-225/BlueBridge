@@ -1,5 +1,5 @@
-
 dependencies {
     implementation project(':BlueBridgeCore')
+    provided 'com.github.BlueMap-Minecraft:BlueMapAPI:2.1.0'
     implementation 'com.github.TechFortress:GriefPrevention:16.17.1'
 }

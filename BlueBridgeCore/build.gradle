@@ -16,14 +16,14 @@ plugins {
 
 
 dependencies {
-    provided 'com.github.BlueMap-Minecraft:BlueMapAPI:v1.6.0'
+    provided 'com.github.BlueMap-Minecraft:BlueMapAPI:2.1.0'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     implementation 'org.apache.commons:commons-text:1.9'
 }
 
 tasks.build.dependsOn tasks.shadowJar
 
-jar{
+jar {
     archiveClassifier = 'NoDependencies'
 }
 

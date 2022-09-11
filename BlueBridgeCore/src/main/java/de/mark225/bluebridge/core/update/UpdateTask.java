@@ -8,6 +8,7 @@ import de.mark225.bluebridge.core.addon.BlueBridgeAddon;
 import de.mark225.bluebridge.core.bluemap.BlueMapIntegration;
 import de.mark225.bluebridge.core.config.BlueBridgeConfig;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -49,22 +50,19 @@ public class UpdateTask extends BukkitRunnable {
     public void run() {
         List<BlueBridgeAddon> addons = AddonRegistry.getIfActive(false);
         ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> newSnapshots = new ConcurrentHashMap<>();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (BlueBridgeAddon addon : addons) {
-                    for (UUID world : worlds.keySet()) {
-                        ConcurrentMap<String, RegionSnapshot> worldSnapshots = addon.fetchSnapshots(world);
-                        if (newSnapshots.containsKey(addon.name())) {
-                            newSnapshots.get(addon.name()).putAll(worldSnapshots);
-                        } else {
-                            newSnapshots.put(addon.name(), worldSnapshots);
-                        }
+        Bukkit.getScheduler().runTaskAsynchronously(BlueBridgeCore.getInstance(), () ->{
+            for (BlueBridgeAddon addon : addons) {
+                for (UUID world : worlds.keySet()) {
+                    ConcurrentMap<String, RegionSnapshot> worldSnapshots = addon.fetchSnapshots(world);
+                    if (newSnapshots.containsKey(addon.name())) {
+                        newSnapshots.get(addon.name()).putAll(worldSnapshots);
+                    } else {
+                        newSnapshots.put(addon.name(), worldSnapshots);
                     }
                 }
-                doUpdate(newSnapshots);
             }
-        }.runTaskAsynchronously(BlueBridgeCore.getInstance());
+            doUpdate(newSnapshots);
+        });
     }
 
     private void doSyncUpdate(BlueMapIntegration integration) {

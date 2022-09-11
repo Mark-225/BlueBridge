@@ -19,21 +19,21 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BlueMapIntegration {
 
     private BlueMapAPI blueMapAPI = null;
+
+    private Map<AbstractMap.SimpleEntry<String, UUID>, MarkerSet> markerSets = new ConcurrentHashMap<>();
 
     public void onEnable(BlueMapAPI blueMapAPI) {
         this.blueMapAPI = blueMapAPI;
         Bukkit.getScheduler().runTask(BlueBridgeCore.getInstance(), () -> {
             BlueBridgeCore.getInstance().updateConfig();
             BlueBridgeCore.getInstance().reloadAddons();
-            resetMarkers();
+            createMarkerSets();
             UpdateTask.worlds.clear();
             UpdateTask.resetLastSnapshots();
             for (World bukkitWorld : Bukkit.getWorlds()) {
@@ -49,15 +49,20 @@ public class BlueMapIntegration {
         BlueBridgeCore.getInstance().stopUpdateTask();
     }
 
-    private void resetMarkers() {
-        for (BlueBridgeAddon addon : AddonRegistry.getAddons()) {
-            for (BlueMapWorld world : blueMapAPI.getWorlds()) {
-                for (BlueMapMap map : world.getMaps()) {
-                    map.getMarkerSets().put(getMarkerSetId(addon.name()), MarkerSet.builder()
-                            .label(addon.markerSetName())
-                            .defaultHidden(addon.defaultHide())
-                            .build());
-                }
+    private void createMarkerSets() {
+        markerSets.clear();
+        for (World w : Bukkit.getWorlds()) {
+            Optional<BlueMapWorld> oWorld = blueMapAPI.getWorld(w.getUID());
+            if(oWorld.isEmpty()) continue;
+            BlueMapWorld blueMapWorld = oWorld.get();
+            for (BlueBridgeAddon addon : AddonRegistry.getAddons()) {
+                MarkerSet markerSet = MarkerSet.builder()
+                        .label(addon.markerSetName())
+                        .defaultHidden(addon.defaultHide())
+                        .build();
+                markerSets.put(new AbstractMap.SimpleEntry<>(addon.name(), w.getUID()), markerSet);
+                String markerSetId = addon.name() + "-" + w.getUID();
+                blueMapWorld.getMaps().forEach(blueMapMap -> blueMapMap.getMarkerSets().put(markerSetId, markerSet));
             }
         }
     }
@@ -71,22 +76,16 @@ public class BlueMapIntegration {
             Shape shape = new Shape(rs.getPoints().toArray(new Vector2d[0]));
             Vector2d midPoint2d = findMidpoint(rs.getPoints());
             Vector3d pos = new Vector3d(midPoint2d.getX(), rs.getHeight(), midPoint2d.getY());
-            for (BlueMapMap map : getMapsForWorld(rs.getWorld())) {
-                MarkerSet ms = map.getMarkerSets().get(getMarkerSetId(rs.getAddon()));
-                if (ms != null) {
-                    addToMarkerSet(ms, map, rs, shape, pos);
-                }
-            }
+            Optional<MarkerSet> ms = getMarkerSet(rs.getAddon(), rs.getWorld());
+            ms.ifPresent(markerSet -> addToMarkerSet(markerSet, rs, shape, pos));
         }
     }
 
     public void remove(Collection<RegionSnapshot> regions) {
         for (RegionSnapshot rs : regions) {
-            for (BlueMapMap map : getMapsForWorld(rs.getWorld())) {
-                for (Map.Entry<String, MarkerSet> entry : map.getMarkerSets().entrySet()) {
-                    entry.getValue().getMarkers().remove(getGlobalRegionId(rs.getAddon(), rs.getId(), map.getId(), rs.getWorld().toString()));
-                }
-            }
+            getMarkerSet(rs.getAddon(), rs.getWorld()).ifPresent(markerSet -> {
+                markerSet.getMarkers().remove(getGlobalRegionId(rs.getAddon(), rs.getId(), rs.getWorld().toString()));
+            });
         }
     }
 
@@ -94,7 +93,7 @@ public class BlueMapIntegration {
         return UpdateTask.worlds.get(world).getMaps();
     }
 
-    private void addToMarkerSet(MarkerSet ms, BlueMapMap map, RegionSnapshot rs, Shape shape, Vector3d pos) {
+    private void addToMarkerSet(MarkerSet ms, RegionSnapshot rs, Shape shape, Vector3d pos) {
         if (rs.isExtrude()) {
             ExtrudeMarker em = ExtrudeMarker.builder()
                     .position(pos)
@@ -103,10 +102,10 @@ public class BlueMapIntegration {
                     .detail(rs.getHtmlDisplay())
                     .lineColor(rs.getBorderColor())
                     .fillColor(rs.getColor())
-                    .depthTestEnabled(true)
+                    .depthTestEnabled(rs.getDepthCheck())
                     .build();
             defineDistances(em, rs);
-            ms.getMarkers().put(getGlobalRegionId(rs.getAddon(), rs.getId(), map.getId(), rs.getWorld().toString()), em);
+            ms.getMarkers().put(getGlobalRegionId(rs.getAddon(), rs.getId(), rs.getWorld().toString()), em);
         } else {
             ShapeMarker sm = ShapeMarker.builder()
                     .position(pos)
@@ -115,10 +114,10 @@ public class BlueMapIntegration {
                     .detail(rs.getHtmlDisplay())
                     .lineColor(rs.getBorderColor())
                     .fillColor(rs.getColor())
-                    .depthTestEnabled(true)
+                    .depthTestEnabled(rs.getDepthCheck())
                     .build();
             defineDistances(sm, rs);
-            ms.getMarkers().put(getGlobalRegionId(rs.getAddon(), rs.getId(), map.getId(), rs.getWorld().toString()), sm);
+            ms.getMarkers().put(getGlobalRegionId(rs.getAddon(), rs.getId(), rs.getWorld().toString()), sm);
         }
     }
 
@@ -134,8 +133,12 @@ public class BlueMapIntegration {
         }
     }
 
-    private String getGlobalRegionId(String addon, String region, String mapId, String worldId) {
-        return "!BlueBridge_RegionMarker#" + addon + "_" + worldId + "/" + mapId + ":" + region;
+    private String getGlobalRegionId(String addon, String region, String worldId) {
+        return "!BlueBridge_RegionMarker#" + addon + "_" + worldId + ":" + region;
+    }
+
+    private Optional<MarkerSet> getMarkerSet(String addon, UUID world){
+        return Optional.ofNullable(markerSets.get(new AbstractMap.SimpleEntry<>(addon, world)));
     }
 
     private Vector2d findMidpoint(List<Vector2d> polygon) {

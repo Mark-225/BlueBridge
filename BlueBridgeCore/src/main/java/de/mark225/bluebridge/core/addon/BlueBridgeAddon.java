@@ -16,6 +16,10 @@ public abstract class BlueBridgeAddon {
 
     public abstract ConcurrentMap<String, RegionSnapshot> fetchSnapshots(UUID world);
 
+    public boolean supportsAsync(){
+        return true;
+    }
+
     public abstract void reload();
 
     public abstract boolean isActiveAddon();

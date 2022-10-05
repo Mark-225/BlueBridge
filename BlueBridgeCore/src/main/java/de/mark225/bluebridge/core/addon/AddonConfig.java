@@ -4,6 +4,9 @@ import de.bluecolored.bluemap.api.math.Color;
 import de.mark225.bluebridge.core.config.BlueBridgeConfig;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public abstract class AddonConfig {
@@ -56,6 +59,13 @@ public abstract class AddonConfig {
 
     public synchronized boolean defaultHideSets() {
         return config.getBoolean("hideMarkersets", BlueBridgeConfig.defaultHideSets());
+    }
+
+    public synchronized List<String> excludedMaps() {
+        List<String> worlds = new ArrayList<>();
+        worlds.addAll(config.getStringList("excludedMaps"));
+        worlds.addAll(BlueBridgeConfig.excludedMaps());
+        return worlds;
     }
 
 

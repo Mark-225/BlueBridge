@@ -21,12 +21,14 @@ import org.bukkit.World;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BlueMapIntegration {
 
     private BlueMapAPI blueMapAPI = null;
 
     private Map<AbstractMap.SimpleEntry<String, UUID>, MarkerSet> markerSets = new ConcurrentHashMap<>();
+    private Map<String, List<String>> excludedMaps = new ConcurrentHashMap<>();
 
     public void onEnable(BlueMapAPI blueMapAPI) {
         this.blueMapAPI = blueMapAPI;
@@ -34,6 +36,7 @@ public class BlueMapIntegration {
             BlueBridgeCore.getInstance().updateConfig();
             BlueBridgeCore.getInstance().reloadAddons();
             createMarkerSets();
+            reloadExclusions();
             UpdateTask.worlds.clear();
             UpdateTask.resetLastSnapshots();
             for (World bukkitWorld : Bukkit.getWorlds()) {
@@ -62,7 +65,7 @@ public class BlueMapIntegration {
                         .build();
                 markerSets.put(new AbstractMap.SimpleEntry<>(addon.name(), w.getUID()), markerSet);
                 String markerSetId = addon.name() + "-" + w.getUID();
-                blueMapWorld.getMaps().forEach(blueMapMap -> blueMapMap.getMarkerSets().put(markerSetId, markerSet));
+                blueMapWorld.getMaps().stream().filter(blueMapMap -> !isExcluded(addon.name(), blueMapMap.getId())).forEach(blueMapMap -> blueMapMap.getMarkerSets().put(markerSetId, markerSet));
             }
         }
     }
@@ -162,6 +165,17 @@ public class BlueMapIntegration {
                 maxY = vector.getY();
         }
         return new Vector2d(minX + ((maxX - minX) / 2d), minY + ((maxY - minY) / 2d));
+    }
+
+    private void reloadExclusions(){
+        excludedMaps.clear();
+        for(BlueBridgeAddon addon : AddonRegistry.getAddons()){
+            excludedMaps.put(addon.name(), new CopyOnWriteArrayList<>(addon.addonConfig().excludedMaps()));
+        }
+    }
+
+    private boolean isExcluded(String addon, String map){
+        return excludedMaps.getOrDefault(addon, Collections.emptyList()).contains(map);
     }
 
 

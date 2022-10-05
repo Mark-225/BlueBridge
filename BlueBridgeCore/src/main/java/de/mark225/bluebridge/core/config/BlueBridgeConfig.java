@@ -3,6 +3,8 @@ package de.mark225.bluebridge.core.config;
 import de.bluecolored.bluemap.api.math.Color;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class BlueBridgeConfig {
@@ -58,5 +60,9 @@ public class BlueBridgeConfig {
 
     public static synchronized boolean debug() {
         return config.getBoolean("debug", false);
+    }
+
+    public static synchronized List<String> excludedMaps() {
+        return config.getStringList("excludedMaps");
     }
 }

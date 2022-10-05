@@ -7,7 +7,7 @@ subprojects {
 
     apply plugin: 'java'
 
-    version '2.0-s'
+    version '2.1'
 
     //Contributors are added to this list in the order of their first contribution. Separate using a comma and space.
     def authors = 'Mark_225, Aurelien30000'

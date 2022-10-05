@@ -6,3 +6,5 @@ include ':BlueBridgeGP'
 project(':BlueBridgeCore').projectDir = "$rootDir/BlueBridgeCore" as File
 project(':BlueBridgeWG').projectDir = "$rootDir/BlueBridgeWG" as File
 project(':BlueBridgeGP').projectDir = "$rootDir/BlueBridgeGP" as File
+include 'BlueBridgeWB'
+

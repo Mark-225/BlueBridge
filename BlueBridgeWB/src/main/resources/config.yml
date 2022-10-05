@@ -1,0 +1,9 @@
+
+# Markerset display name in the sidebar of Bluemap's webinterface
+markerSetName: "World borders"
+
+# Name of World border markers (Appears in the marker section in BlueMap's menu and when the user clicks exactly on the world border)
+markerLabel: "World border"
+
+# Overrides the default outline color from BlueBridgeCore's config.yml
+defaultOutlineColor: "ff0000"

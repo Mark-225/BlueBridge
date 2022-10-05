@@ -50,19 +50,28 @@ public class UpdateTask extends BukkitRunnable {
     public void run() {
         List<BlueBridgeAddon> addons = AddonRegistry.getIfActive(false);
         ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> newSnapshots = new ConcurrentHashMap<>();
+        for (BlueBridgeAddon addon : addons) {
+            if(addon.supportsAsync()) continue;
+            collectSnapshots(addon, newSnapshots);
+        }
         Bukkit.getScheduler().runTaskAsynchronously(BlueBridgeCore.getInstance(), () ->{
             for (BlueBridgeAddon addon : addons) {
-                for (UUID world : worlds.keySet()) {
-                    ConcurrentMap<String, RegionSnapshot> worldSnapshots = addon.fetchSnapshots(world);
-                    if (newSnapshots.containsKey(addon.name())) {
-                        newSnapshots.get(addon.name()).putAll(worldSnapshots);
-                    } else {
-                        newSnapshots.put(addon.name(), worldSnapshots);
-                    }
-                }
+                if(!addon.supportsAsync()) continue;
+                collectSnapshots(addon, newSnapshots);
             }
             doUpdate(newSnapshots);
         });
+    }
+
+    private void collectSnapshots(BlueBridgeAddon addon, ConcurrentMap<String, ConcurrentMap<String, RegionSnapshot>> newSnapshots){
+        for (UUID world : worlds.keySet()) {
+            ConcurrentMap<String, RegionSnapshot> worldSnapshots = addon.fetchSnapshots(world);
+            if (newSnapshots.containsKey(addon.name())) {
+                newSnapshots.get(addon.name()).putAll(worldSnapshots);
+            } else {
+                newSnapshots.put(addon.name(), worldSnapshots);
+            }
+        }
     }
 
     private void doSyncUpdate(BlueMapIntegration integration) {

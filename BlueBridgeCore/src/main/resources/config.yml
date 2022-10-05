@@ -25,6 +25,12 @@ maxDistance: -1
 defaultColor: "0087ff96"
 defaultOutlineColor: "0060ff"
 
+# Uncomment this section to exclude BlueMap maps from rendering regions.
+# You can also add this list to the addon configs to block only their regions from appearing on a map. The two lists (addon specific and BlueBridgeCore) will be merged.
+# excludedMaps:
+#   - "[map ID here]"
+#   - "[another map ID]"
+
 # Additionally to addon specific ways to configure these setting for each region individually, you can also configure default values
 # per addon by adding the config values you want to overwrite to the addon's config.yml.
 # (This doesn't work for core plugin settings, like updateInterval)

@@ -1,4 +1,4 @@
 dependencies {
     implementation project(':BlueBridgeCore')
-    provided 'com.github.BlueMap-Minecraft:BlueMapAPI:2.5.0'
+    provided 'de.bluecolored.bluemap:BlueMapAPI:2.7.2'
 }

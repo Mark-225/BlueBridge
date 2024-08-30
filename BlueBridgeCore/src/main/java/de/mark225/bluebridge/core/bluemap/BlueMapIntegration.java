@@ -32,7 +32,7 @@ public class BlueMapIntegration {
 
     public void onEnable(BlueMapAPI blueMapAPI) {
         this.blueMapAPI = blueMapAPI;
-        Bukkit.getScheduler().runTask(BlueBridgeCore.getInstance(), () -> {
+        Bukkit.getAsyncScheduler().runNow(BlueBridgeCore.getInstance(), x -> {
             BlueBridgeCore.getInstance().updateConfig();
             BlueBridgeCore.getInstance().reloadAddons();
             createMarkerSets();

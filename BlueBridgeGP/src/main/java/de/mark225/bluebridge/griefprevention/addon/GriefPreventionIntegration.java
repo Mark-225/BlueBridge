@@ -32,9 +32,9 @@ public class GriefPreventionIntegration {
         //Schedule updates for all child claims
         if (claim.children != null && !claim.children.isEmpty()) {
             for (Claim child : claim.children) {
-                Bukkit.getScheduler().runTaskLater(BlueBridgeGP.getInstance(), () -> {
+                Bukkit.getAsyncScheduler().runNow(BlueBridgeGP.getInstance(), x -> {
                     addOrUpdateClaim(child);
-                }, 0l);
+                });
             }
         }
 

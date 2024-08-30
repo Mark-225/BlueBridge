@@ -5,3 +5,4 @@ authors: [ ${ contributors } ]
 website: https://github.com/Mark-225/BlueBridge
 api-version: 1.13
 depend: [ "BlueMap" ]
+folia-supported: true

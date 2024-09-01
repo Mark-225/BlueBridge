@@ -5,20 +5,19 @@ buildscript {
         }
     }
     dependencies {
-        classpath "com.github.jengelman.gradle.plugins:shadow:6.0.0"
+        classpath 'com.gradleup.shadow:shadow-gradle-plugin:8.3.0'
     }
 
 }
 
-plugins {
-    id "com.github.johnrengelman.shadow" version "6.0.0"
-}
+apply plugin: 'com.gradleup.shadow'
 
 
 dependencies {
-    provided 'com.github.BlueMap-Minecraft:BlueMapAPI:2.5.0'
+    compileOnly 'de.bluecolored.bluemap:BlueMapAPI:2.7.2'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     implementation 'org.apache.commons:commons-text:1.9'
+    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
 }
 
 tasks.build.dependsOn tasks.shadowJar

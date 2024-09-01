@@ -1,4 +1,4 @@
-# Number of ticks to wait between every update. The default of 200 means 10 seconds.
+# Number of ticks (1 tick is 50 miliseconds) to wait between every update. The default of 200 means 10 seconds.
 updateInterval: 200
 
 # If this is set to true, all regions will be displayed as markers by default unless their region specific setting is false.

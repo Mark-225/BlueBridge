@@ -35,7 +35,7 @@ public class UpdateTask extends BukkitRunnable {
     public static synchronized void createAndSchedule(boolean instant) {
         if (currentTask == null && !locked) {
             currentTask = new UpdateTask();
-            Bukkit.getAsyncScheduler().runDelayed(BlueBridgeCore.getInstance(), x -> currentTask.run(), instant ? 0L : BlueBridgeConfig.updateInterval(), TimeUnit.MICROSECONDS);
+            Bukkit.getAsyncScheduler().runDelayed(BlueBridgeCore.getInstance(), x -> currentTask.run(), instant ? 0L : BlueBridgeConfig.updateInterval()*50, TimeUnit.MICROSECONDS);
         }
     }
 

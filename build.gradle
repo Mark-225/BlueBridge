@@ -7,7 +7,7 @@ subprojects {
 
     apply plugin: 'java'
 
-    version '2.1'
+    version '2.2'
 
     //Add maintainers here (separated by a comma and space). This will be added to the plugin.yml.
     def authors = 'Mark_225'

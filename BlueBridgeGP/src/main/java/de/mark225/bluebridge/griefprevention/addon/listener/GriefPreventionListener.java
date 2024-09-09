@@ -3,7 +3,10 @@ package de.mark225.bluebridge.griefprevention.addon.listener;
 import de.mark225.bluebridge.core.config.BlueBridgeConfig;
 import de.mark225.bluebridge.griefprevention.BlueBridgeGP;
 import me.ryanhamshire.GriefPrevention.Claim;
-import me.ryanhamshire.GriefPrevention.events.*;
+import me.ryanhamshire.GriefPrevention.events.ClaimCreatedEvent;
+import me.ryanhamshire.GriefPrevention.events.ClaimDeletedEvent;
+import me.ryanhamshire.GriefPrevention.events.ClaimExtendEvent;
+import me.ryanhamshire.GriefPrevention.events.ClaimResizeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,12 +35,12 @@ public class GriefPreventionListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onClaimExtend(ClaimExtendEvent e) {
         if (BlueBridgeConfig.debug())
-            BlueBridgeGP.getInstance().getLogger().log(Level.INFO, "Claim extended " + e.getClaim().getID());
+            BlueBridgeGP.getInstance().getLogger().log(Level.INFO, "Claim extended " + e.getTo().getID());
         if (e.isCancelled()) return;
-        Claim claim = e.getClaim();
+        Claim claim = e.getTo();
         while (claim.parent != null)
             claim = claim.parent;
-        scheduleUpdate(e.getClaim());
+        scheduleUpdate(e.getTo());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

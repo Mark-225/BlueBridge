@@ -12,8 +12,8 @@ subprojects {
     //Contributors are added to this list in the order of their first contribution. Separate using a comma and space.
     def authors = 'Mark_225, Aurelien30000'
 
-    sourceCompatibility = 11
-    targetCompatibility = 11
+    sourceCompatibility = 17
+    targetCompatibility = 17
 
     group 'de.mark225'
 

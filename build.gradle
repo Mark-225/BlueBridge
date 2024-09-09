@@ -9,8 +9,8 @@ subprojects {
 
     version '2.1'
 
-    //Contributors are added to this list in the order of their first contribution. Separate using a comma and space.
-    def authors = 'Mark_225, Aurelien30000'
+    //Add maintainers here (separated by a comma and space). This will be added to the plugin.yml.
+    def authors = 'Mark_225'
 
     sourceCompatibility = 17
     targetCompatibility = 17

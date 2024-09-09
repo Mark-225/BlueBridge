@@ -29,7 +29,7 @@ subprojects {
     }
 
     dependencies {
-        provided "org.bukkit:bukkit:1.13.2-R0.1-SNAPSHOT"
+        provided "org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT"
         provided 'com.flowpowered:flow-math:1.0.3'
     }
 

@@ -1,8 +1,8 @@
 package de.mark225.bluebridge.core.region;
 
 import com.flowpowered.math.vector.Vector2d;
+import de.bluecolored.bluemap.api.math.Color;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -21,19 +21,19 @@ public class RegionSnapshot {
     private float upperHeight = 0;
     private boolean depthCheck = false;
     private List<Vector2d> points;
-    private Color color = Color.BLACK;
-    private Color borderColor = Color.BLACK;
+    private Color color = new Color(0, 0, 0);
+    private Color borderColor = new Color(0, 0, 0);
     private double minDistance;
     private double maxDistance;
 
-    public RegionSnapshot(String addon, String id, List<Vector2d> points, UUID world){
+    public RegionSnapshot(String addon, String id, List<Vector2d> points, UUID world) {
         this.addon = addon;
         this.id = id;
         this.points = points;
         this.world = world;
     }
 
-    public String getAddon(){
+    public String getAddon() {
         return addon;
     }
 
@@ -45,11 +45,11 @@ public class RegionSnapshot {
         return height;
     }
 
-    public boolean isExtrude(){
+    public boolean isExtrude() {
         return extrude;
     }
 
-    public float getUpperHeight(){
+    public float getUpperHeight() {
         return upperHeight;
     }
 
@@ -154,15 +154,15 @@ public class RegionSnapshot {
                 getBorderColor().equals(that.getBorderColor());
     }
 
-    public boolean refersSameRegion(RegionSnapshot other){
-        if(other == null)
+    public boolean refersSameRegion(RegionSnapshot other) {
+        if (other == null)
             return false;
-        if(other == this)
+        if (other == this)
             return true;
         return other.getAddon().equals(this.getAddon()) && other.getId().equals(this.getId());
     }
 
-    public enum State{
+    public enum State {
         UNCHANGED,
         CHANGED_OR_ADDED,
         DELETED

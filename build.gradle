@@ -7,20 +7,20 @@ subprojects {
 
     apply plugin: 'java'
 
-    version 'v1.3.1-alpha'
+    version '2.1'
 
-    //Contributors are added to this list in the order of their first contribution. Separate using a comma and space.
-    def authors = 'Mark_225, Aurelien30000'
+    //Add maintainers here (separated by a comma and space). This will be added to the plugin.yml.
+    def authors = 'Mark_225'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 17
+    targetCompatibility = 17
 
     group 'de.mark225'
 
-    repositories{
+    repositories {
         mavenCentral()
         maven { url "https://jitpack.io" }
-        maven {url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"}
+        maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots" }
     }
 
     configurations {
@@ -29,16 +29,16 @@ subprojects {
     }
 
     dependencies {
-        provided "org.bukkit:bukkit:1.13.2-R0.1-SNAPSHOT"
+        provided "org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT"
         provided 'com.flowpowered:flow-math:1.0.3'
     }
-    
+
     tasks.withType(Jar) {
         destinationDirectory = file("$rootDir/build/target")
     }
 
-    processResources{
-        filesMatching('plugin.yml'){
+    processResources {
+        filesMatching('plugin.yml') {
             expand([gradleVersion: version, contributors: authors])
         }
     }

@@ -1,11 +1,10 @@
 package de.mark225.bluebridge.core.region;
 
 import com.flowpowered.math.vector.Vector2d;
+import de.bluecolored.bluemap.api.math.Color;
 import de.mark225.bluebridge.core.addon.AddonConfig;
 import de.mark225.bluebridge.core.addon.BlueBridgeAddon;
-import de.mark225.bluebridge.core.config.BlueBridgeConfig;
 
-import java.awt.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,13 +13,13 @@ public class RegionSnapshotBuilder {
     private RegionSnapshot region;
     private BlueBridgeAddon addon;
 
-    public RegionSnapshotBuilder(BlueBridgeAddon addon, String id, List<Vector2d> points, UUID world){
+    public RegionSnapshotBuilder(BlueBridgeAddon addon, String id, List<Vector2d> points, UUID world) {
         this.addon = addon;
         region = new RegionSnapshot(addon.name(), id, points, world);
         prefillDefaults();
     }
 
-    private void prefillDefaults(){
+    private void prefillDefaults() {
         AddonConfig cfg = addon.addonConfig();
         region.setHtmlDisplay("unnamed");
         region.setShortName("unnamed");
@@ -36,57 +35,57 @@ public class RegionSnapshotBuilder {
 
     }
 
-    public RegionSnapshotBuilder setHtmlDisplay(String display){
+    public RegionSnapshotBuilder setHtmlDisplay(String display) {
         region.setHtmlDisplay(display);
         return this;
     }
 
-    public RegionSnapshotBuilder setShortName(String name){
+    public RegionSnapshotBuilder setShortName(String name) {
         region.setShortName(name);
         return this;
     }
 
-    public RegionSnapshotBuilder setHeight(float height){
+    public RegionSnapshotBuilder setHeight(float height) {
         region.setHeight(height);
         return this;
     }
 
-    public RegionSnapshotBuilder setExtrude(boolean extrude){
+    public RegionSnapshotBuilder setExtrude(boolean extrude) {
         region.setExtrude(extrude);
         return this;
     }
 
-    public RegionSnapshotBuilder setUpperHeight(float upperHeight){
+    public RegionSnapshotBuilder setUpperHeight(float upperHeight) {
         region.setUpperHeight(upperHeight);
         return this;
     }
 
-    public RegionSnapshotBuilder setDepthCheck(boolean depthCheck){
+    public RegionSnapshotBuilder setDepthCheck(boolean depthCheck) {
         region.setDepthCheck(depthCheck);
         return this;
     }
 
-    public RegionSnapshotBuilder setColor(Color color){
+    public RegionSnapshotBuilder setColor(Color color) {
         region.setColor(color);
         return this;
     }
 
-    public RegionSnapshotBuilder setBorderColor(Color color){
+    public RegionSnapshotBuilder setBorderColor(Color color) {
         region.setBorderColor(color);
         return this;
     }
 
-    public RegionSnapshotBuilder setMinDistance(double minDistance){
+    public RegionSnapshotBuilder setMinDistance(double minDistance) {
         region.setMinDistance(minDistance);
         return this;
     }
 
-    public RegionSnapshotBuilder setMaxDistance(double maxDistance){
+    public RegionSnapshotBuilder setMaxDistance(double maxDistance) {
         region.setMaxDistance(maxDistance);
         return this;
     }
 
-    public RegionSnapshot build(){
+    public RegionSnapshot build() {
         return region;
     }
 

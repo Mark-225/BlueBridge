@@ -35,7 +35,7 @@ public class BlueBridgeWGAddon extends BlueBridgeAddon {
     @Override
     public ConcurrentMap<String, RegionSnapshot> fetchSnapshots(UUID world) {
         WorldGuardIntegration integration = BlueBridgeWG.getInstance().getWGIntegration();
-        if(integration != null){
+        if (integration != null) {
             return integration.getAllRegions(world).stream().collect(Collectors.toConcurrentMap(RegionSnapshot::getId, rs -> rs));
         }
         return new ConcurrentHashMap<>();

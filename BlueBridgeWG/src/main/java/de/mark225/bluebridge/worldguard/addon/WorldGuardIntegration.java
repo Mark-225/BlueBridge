@@ -13,6 +13,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import de.bluecolored.bluemap.api.math.Color;
 import de.mark225.bluebridge.core.region.RegionSnapshot;
 import de.mark225.bluebridge.core.region.RegionSnapshotBuilder;
 import de.mark225.bluebridge.core.util.BlueBridgeUtils;
@@ -21,9 +22,7 @@ import de.mark225.bluebridge.worldguard.config.BlueBridgeWGConfig;
 import de.mark225.bluebridge.worldguard.util.RegionStringLookup;
 import org.bukkit.Bukkit;
 
-import java.awt.*;
 import java.util.*;
-import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -43,9 +42,10 @@ public class WorldGuardIntegration {
 
     /**
      * Initializes the Worldguard integration and registers the custom flags. Can only be called once during {@link org.bukkit.plugin.java.JavaPlugin#onLoad()}
+     *
      * @return true if the registration of custom flags was successful
      */
-    public boolean init(){
+    public boolean init() {
         //register custom flags
         FlagRegistry flags = WorldGuard.getInstance().getFlagRegistry();
         try {
@@ -53,8 +53,8 @@ public class WorldGuardIntegration {
             StateFlag depthCheckFlag = new StateFlag("bluemap-depth-check", false);
             IntegerFlag heightFlag = new IntegerFlag("bluemap-render-height");
             StateFlag extrudeFlag = new StateFlag("bluemap-extrude", false);
-            StringFlag colorFlag = new StringFlag("bluemap-color", Integer.toHexString(BlueBridgeWGConfig.getInstance().defaultColor().getRGB()));
-            StringFlag outlineFlag = new StringFlag("bluemap-color-outline", Integer.toHexString(BlueBridgeWGConfig.getInstance().defaultOutlineColor().getRGB()).substring(2));
+            StringFlag colorFlag = new StringFlag("bluemap-color", Integer.toHexString(BlueBridgeUtils.colorToInt(BlueBridgeWGConfig.getInstance().defaultColor())));
+            StringFlag outlineFlag = new StringFlag("bluemap-color-outline", Integer.toHexString(BlueBridgeUtils.colorToInt(BlueBridgeWGConfig.getInstance().defaultOutlineColor())).substring(2));
             StringFlag displayFlag = new StringFlag("bluemap-display");
             DoubleFlag maxDistanceFlag = new DoubleFlag("bluemap-max-distance");
             DoubleFlag minDistanceFlag = new DoubleFlag("bluemap-min-distance");
@@ -70,7 +70,7 @@ public class WorldGuardIntegration {
             MIN_DISTANCE_FLAG = minDistanceFlag;
 
             return true;
-        }catch(FlagConflictException e){
+        } catch (FlagConflictException e) {
             BlueBridgeWG.getInstance().getLogger().severe("Custom Worldguard flags are conflicting with another plugin!");
         }
         return false;
@@ -79,14 +79,14 @@ public class WorldGuardIntegration {
     /**
      * Iterates through all Worldguard regions of a given world, filters out regions that can't be rendered or
      * are configured to not be rendered on Bluemap and returns them as seperate {@link RegionSnapshot} objects.
+     *
      * @param worldUUID
      * @return The List of region snapshots
      */
-    public List<RegionSnapshot> getAllRegions(UUID worldUUID){
-
+    public List<RegionSnapshot> getAllRegions(UUID worldUUID) {
         org.bukkit.World bukkitWorld = Bukkit.getWorld(worldUUID);
 
-        if(bukkitWorld == null){
+        if (bukkitWorld == null) {
             BlueBridgeWG.getInstance().getLogger().warning("World " + worldUUID.toString() + " not found! Please check your Bluemap config for invalid worlds!");
             return new ArrayList<RegionSnapshot>();
         }
@@ -94,7 +94,7 @@ public class WorldGuardIntegration {
         World w = BukkitAdapter.adapt(bukkitWorld);
         RegionContainer regions = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager rm = regions.get(w);
-        if(rm != null) {
+        if (rm != null) {
             return rm.getRegions().values().stream().filter(pr -> {
                 //filter all regions that shall not be rendered
                 StateFlag.State state = pr.getFlag(RENDER_FLAG);
@@ -106,20 +106,14 @@ public class WorldGuardIntegration {
                 String color = pr.getFlag(COLOR_FLAG);
                 Color colorRGBA = null;
                 if (color != null && hexPatternRGBA.matcher(color).matches()) {
-                    int a, r, g, b;
-                    a = Integer.parseInt(color.substring(0, 2), 16);
-                    r = Integer.parseInt(color.substring(2, 4), 16);
-                    g = Integer.parseInt(color.substring(4, 6), 16);
-                    b = Integer.parseInt(color.substring(6, 8), 16);
-                    int rgba = (((((a << 8) + r) << 8) + g) << 8) + b;
-                    colorRGBA = new Color(rgba, true);
+                    colorRGBA = new Color("#" + color);
                 } else {
                     colorRGBA = BlueBridgeWGConfig.getInstance().defaultColor();
                 }
                 String bordercolor = pr.getFlag(OUTLINE_FLAG);
                 Color colorRGB = null;
                 if (bordercolor != null && hexPatternRGB.matcher(bordercolor).matches()) {
-                    colorRGB = new Color(Integer.parseInt(bordercolor, 16), false);
+                    colorRGB = new Color("#" + bordercolor);
                 } else {
                     colorRGB = BlueBridgeWGConfig.getInstance().defaultOutlineColor();
                 }
@@ -144,7 +138,7 @@ public class WorldGuardIntegration {
                         .setShortName(pr.getId())
                         .setHeight(extrude ? pr.getMinimumPoint().getBlockY() : height)
                         .setExtrude(extrude)
-                        .setUpperHeight(pr.getMaximumPoint().getBlockY() +1)
+                        .setUpperHeight(pr.getMaximumPoint().getBlockY() + 1)
                         .setDepthCheck(depthCheck)
                         .setColor(colorRGBA)
                         .setBorderColor(colorRGB)
@@ -156,19 +150,19 @@ public class WorldGuardIntegration {
         return Collections.emptyList();
     }
 
-    private String parseHtmlDisplay(ProtectedRegion region){
+    private String parseHtmlDisplay(ProtectedRegion region) {
         return BlueBridgeUtils.replace(new RegionStringLookup(region), BlueBridgeWGConfig.getInstance().htmlPreset());
     }
 
-    private List<Vector2d> getPointsForRegion(ProtectedRegion region){
-        if(region instanceof ProtectedCuboidRegion){
+    private List<Vector2d> getPointsForRegion(ProtectedRegion region) {
+        if (region instanceof ProtectedCuboidRegion) {
             BlockVector3 blockVectorMin = region.getMinimumPoint();
             BlockVector3 blockVectorMax = region.getMaximumPoint();
             Vector2d min = new Vector2d(blockVectorMin.getX(), blockVectorMin.getZ());
             Vector2d max = new Vector2d(blockVectorMax.getX(), blockVectorMax.getZ());
             List<Vector2d> list = new ArrayList<>();
             list.add(min);
-            list.add(new Vector2d(max.getX() +1, min.getY()));
+            list.add(new Vector2d(max.getX() + 1, min.getY()));
             list.add(new Vector2d(max.getX() + 1, max.getY() + 1));
             list.add(new Vector2d(min.getX(), max.getY() + 1));
             return list;
@@ -176,10 +170,10 @@ public class WorldGuardIntegration {
         return region.getPoints().stream().map(bv2 -> new Vector2d(bv2.getX() + 0.5, bv2.getZ() + 0.5)).collect(Collectors.toList());
     }
 
-    private int polygonArea(List<BlockVector2> coordinates){
+    private int polygonArea(List<BlockVector2> coordinates) {
         int size = coordinates.size();
         int sum = 0;
-        for(int i = 0; i < size; i++){
+        for (int i = 0; i < size; i++) {
             sum += (coordinates.get(i).getX() * coordinates.get((i + 1) % size).getZ()) - (coordinates.get(i).getZ() * coordinates.get((i + 1) % size).getX());
         }
         return Math.abs((int) ((double) sum / 2d));

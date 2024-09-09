@@ -11,20 +11,20 @@ public class BlueBridgeGP extends JavaPlugin {
     private static BlueBridgeGPAddon addon;
     private GriefPreventionIntegration integration;
 
-    public static BlueBridgeGP getInstance(){
+    public static BlueBridgeGP getInstance() {
         return instance;
     }
 
-    public GriefPreventionIntegration getGPIntegration(){
+    public GriefPreventionIntegration getGPIntegration() {
         return integration;
     }
 
-    public BlueBridgeGPAddon getAddon(){
+    public BlueBridgeGPAddon getAddon() {
         return addon;
     }
 
     @Override
-    public void onLoad(){
+    public void onLoad() {
         instance = this;
         updateConfig();
         integration = new GriefPreventionIntegration();
@@ -33,11 +33,11 @@ public class BlueBridgeGP extends JavaPlugin {
     }
 
     @Override
-    public void onEnable(){
+    public void onEnable() {
         integration.init();
     }
 
-    public void updateConfig(){
+    public void updateConfig() {
         saveDefaultConfig();
         reloadConfig();
         new BlueBridgeGPConfig(getConfig());

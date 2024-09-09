@@ -29,31 +29,33 @@ defaultExtrude: false
 # ${flag:flagname}: the value of the given worldguard flag
 htmlPreset: |-
   <h2 style="color:#${flag:bluemap-color-outline};text-align:center;margin-block-end:0.3em">
-  ${name}
+    <span style="text-transform: capitalize;">${name}</span>
   </h2>
   <p style="text-align:center">
-  Area: ${size:2d}<br>Volume: ${size:3d}
+    Area: ${size:2d}
+    <br />
+    Volume: ${size:3d}
   </p>
   <div style="display:flex">
-  <div style="flex:50%;padding:10px">
-  <h3 style="margin-block-start:0.3em;margin-block-end:0.3em">
-  Owners
-  </h3>
-  <p>
-  <span>
-  ${owners:<br>}
-  </span>
-  </p>
+    <div style="flex:50%;padding:10px">
+      <h3 style="margin-block-start:0.3em;margin-block-end:0.3em">
+        Owners
+      </h3>
+      <p>
+        <span>
+          ${owners:<br>}
+        </span>
+      </p>
+    </div>
+    <div style="flex:50%;padding:10px">
+      <h3 style="margin-block-start:0.3em;margin-block-end:0.3em">
+        Members
+      </h3>
+      <p>
+        <span>
+          ${members:<br>}
+        </span>
+      </p>
+    </div>
   </div>
-  <div style="flex:50%;padding:10px">
-  <h3 style="margin-block-start:0.3em;margin-block-end:0.3em">
-  Members
-  </h3>
-  <p>
-  <span>
-  ${members:<br>}
-  </span>
-  </p>
-  </div>
-  </p>
 

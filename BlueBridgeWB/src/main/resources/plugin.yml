@@ -1,7 +1,7 @@
-name: BlueBridgeWG
-main: de.mark225.bluebridge.worldguard.BlueBridgeWG
+main: de.mark225.bluebridge.worldborders.BlueBridgeWB
+name: BlueBridgeWB
 version: ${gradleVersion}
 authors: [ ${ contributors } ]
 website: https://github.com/Mark-225/BlueBridge
 api-version: 1.13
-depend: [ "BlueBridgeCore", "WorldGuard" ]
+depend: [ "BlueBridgeCore" ]

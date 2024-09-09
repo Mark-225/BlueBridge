@@ -52,6 +52,7 @@ public class BlueBridgeWBAddon extends BlueBridgeAddon {
                 .setBorderColor(addonConfig().defaultOutlineColor())
                 .setColor(new Color(0, 0, 0, 0))
                 .setShortName(BlueBridgeWBConfig.getInstance().markerLabel())
+                .setHtmlDisplay(BlueBridgeWBConfig.getInstance().markerLabel())
                 .setHeight(addonConfig().renderHeight())
                 .build();
         map.put(region.getId(), region);

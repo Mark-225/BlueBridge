@@ -1,22 +1,19 @@
 buildscript {
     repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
+        gradlePluginPortal()
     }
     dependencies {
-        classpath "com.github.jengelman.gradle.plugins:shadow:6.0.0"
+        classpath 'com.gradleup.shadow:shadow-gradle-plugin:8.3.0'
     }
-
 }
 
 plugins {
-    id "com.github.johnrengelman.shadow" version "6.0.0"
+    id 'com.gradleup.shadow' version '8.3.0'
 }
 
 
 dependencies {
-    provided 'com.github.BlueMap-Minecraft:BlueMapAPI:2.5.0'
+    provided 'com.github.BlueMap-Minecraft:BlueMapAPI:2.6.2'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     implementation 'org.apache.commons:commons-text:1.9'
 }

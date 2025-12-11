@@ -4,6 +4,6 @@ repositories {
 
 dependencies {
     implementation project(':BlueBridgeCore')
-    provided 'com.github.BlueMap-Minecraft:BlueMapAPI:2.6.2'
-    provided 'com.sk89q.worldguard:worldguard-bukkit:7.0.14'
+    compileOnly 'de.bluecolored:bluemap-api:2.7.7'
+    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.14'
 }

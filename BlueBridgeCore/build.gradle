@@ -1,16 +1,6 @@
-buildscript {
-    repositories {
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath 'com.gradleup.shadow:shadow-gradle-plugin:8.3.0'
-    }
-}
-
 plugins {
     id 'com.gradleup.shadow' version '8.3.0'
 }
-
 
 dependencies {
     compileOnly 'de.bluecolored:bluemap-api:2.7.7'

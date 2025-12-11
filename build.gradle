@@ -34,11 +34,11 @@ subprojects {
 
     dependencies {
         compileOnly("io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")
-        provided 'com.flowpowered:flow-math:1.0.3'
+        compileOnly 'com.flowpowered:flow-math:1.0.3'
     }
 
-    tasks.withType(Jar) {
-        destinationDirectory = file("$rootDir/build/target")
+    tasks.withType(Jar).configureEach {
+        it.destinationDirectory = file("$rootDir/build/target")
     }
 
     processResources {

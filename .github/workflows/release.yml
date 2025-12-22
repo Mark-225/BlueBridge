@@ -1,0 +1,39 @@
+name: release.yml
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Essential for creating the release
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for changelog generation to see history
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Make Gradle Wrapper Executable
+        run: chmod +x ./gradlew
+      - name: Build Shaded JARs
+        run: ./gradlew clean shadowJar
+      - name: Remove Unshaded JAR
+        run: rm build/target/BlueBridgeCore-*-NoDependencies.jar
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/target/BlueBridgeCore-*.jar
+            build/target/BlueBridgeGP-*.jar
+            build/target/BlueBridgeWG-*.jar
+            build/target/BlueBridgeWB-*.jar

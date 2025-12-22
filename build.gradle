@@ -7,7 +7,7 @@ subprojects {
 
     apply plugin: 'java'
 
-    version '2.2'
+    version '2.3'
 
     //Add maintainers here (separated by a comma and space). This will be added to the plugin.yml.
     def authors = 'Mark_225'
@@ -24,6 +24,7 @@ subprojects {
             name = "papermc"
             url = uri("https://repo.papermc.io/repository/maven-public/")
         }
+        maven { url 'https://repo.bluecolored.de/releases' }
     }
 
     configurations {
@@ -32,12 +33,12 @@ subprojects {
     }
 
     dependencies {
-        compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
-        provided 'com.flowpowered:flow-math:1.0.3'
+        compileOnly("io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")
+        compileOnly 'com.flowpowered:flow-math:1.0.3'
     }
 
-    tasks.withType(Jar) {
-        destinationDirectory = file("$rootDir/build/target")
+    tasks.withType(Jar).configureEach {
+        it.destinationDirectory = file("$rootDir/build/target")
     }
 
     processResources {

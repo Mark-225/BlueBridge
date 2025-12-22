@@ -1,4 +1,36 @@
+plugins {
+    id 'com.gradleup.shadow' version '8.3.0'
+}
+
 dependencies {
-    implementation project(':BlueBridgeCore')
-    provided 'com.github.BlueMap-Minecraft:BlueMapAPI:2.6.2'
+    compileOnly project(':BlueBridgeCore')
+    compileOnly 'de.bluecolored:bluemap-api:2.7.7'
+}
+
+tasks.build.dependsOn tasks.shadowJar
+
+jar {
+    archiveClassifier = 'NoDependencies'
+}
+
+shadowJar {
+    zip64 = true
+    mergeServiceFiles()
+    relocate 'org.apache.commons.text', 'de.mark225.shadow.org.apache.commons.text'
+    relocate 'org.apache.commons.lang3', 'de.mark225.shadow.org.apache.commons.lang3'
+    archiveClassifier = ''
+    def exclude_modules = project
+            .configurations
+            .provided
+            .resolvedConfiguration
+            .getLenientConfiguration()
+            .getAllModuleDependencies()
+            .collect {
+                it.name
+            }
+    dependencies {
+        exclude(dependency {
+            exclude_modules.contains(it.name)
+        })
+    }
 }

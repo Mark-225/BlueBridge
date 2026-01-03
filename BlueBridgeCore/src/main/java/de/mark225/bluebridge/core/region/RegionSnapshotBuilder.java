@@ -30,6 +30,7 @@ public class RegionSnapshotBuilder {
         region.setDepthCheck(cfg.defaultDepthCheck());
         region.setColor(cfg.defaultColor());
         region.setBorderColor(cfg.defaultOutlineColor());
+        region.setOutlineWidth(cfg.defaultOutlineWidth());
         region.setMinDistance(cfg.minDistance());
         region.setMaxDistance(cfg.maxDistance());
 
@@ -72,6 +73,11 @@ public class RegionSnapshotBuilder {
 
     public RegionSnapshotBuilder setBorderColor(Color color) {
         region.setBorderColor(color);
+        return this;
+    }
+
+    public RegionSnapshotBuilder setOutlineWidth(int outlineWidth) {
+        region.setOutlineWidth(outlineWidth);
         return this;
     }
 

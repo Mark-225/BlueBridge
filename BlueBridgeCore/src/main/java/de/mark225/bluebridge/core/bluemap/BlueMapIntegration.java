@@ -104,6 +104,7 @@ public class BlueMapIntegration {
                     .label(StringEscapeUtils.escapeHtml4(rs.getShortName()))
                     .detail(rs.getHtmlDisplay())
                     .lineColor(rs.getBorderColor())
+                    .lineWidth(rs.getOutlineWidth())
                     .fillColor(rs.getColor())
                     .depthTestEnabled(rs.getDepthCheck())
                     .build();
@@ -116,6 +117,7 @@ public class BlueMapIntegration {
                     .label(StringEscapeUtils.escapeHtml4(rs.getShortName()))
                     .detail(rs.getHtmlDisplay())
                     .lineColor(rs.getBorderColor())
+                    .lineWidth(rs.getOutlineWidth())
                     .fillColor(rs.getColor())
                     .depthTestEnabled(rs.getDepthCheck())
                     .build();

@@ -23,6 +23,7 @@ public class RegionSnapshot {
     private List<Vector2d> points;
     private Color color = new Color(0, 0, 0);
     private Color borderColor = new Color(0, 0, 0);
+    private int outlineWidth = 2;
     private double minDistance;
     private double maxDistance;
 
@@ -81,6 +82,10 @@ public class RegionSnapshot {
         return borderColor;
     }
 
+    public int getOutlineWidth() {
+        return outlineWidth;
+    }
+
     public double getMinDistance() {
         return minDistance;
     }
@@ -124,6 +129,10 @@ public class RegionSnapshot {
 
     public void setBorderColor(Color borderColor) {
         this.borderColor = borderColor;
+    }
+
+    public void setOutlineWidth(int outlineWidth) {
+        this.outlineWidth = outlineWidth;
     }
 
     public void setMinDistance(double minDistance) {

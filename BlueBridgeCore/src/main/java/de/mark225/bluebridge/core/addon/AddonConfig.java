@@ -5,7 +5,6 @@ import de.mark225.bluebridge.core.config.BlueBridgeConfig;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -51,6 +50,10 @@ public abstract class AddonConfig {
         if (!rgbRegex.matcher(rgb).matches())
             return BlueBridgeConfig.defaultOutlineColor();
         return new Color("#" + rgb);
+    }
+
+    public synchronized int defaultOutlineWidth() {
+        return config.getInt("defaultOutlineWidth", 2);
     }
 
     public synchronized String markerSetName() {

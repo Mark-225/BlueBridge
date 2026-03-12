@@ -33,6 +33,7 @@ public class WorldGuardIntegration {
     public static StateFlag EXTRUDE_FLAG;
     public static StringFlag COLOR_FLAG;
     public static StringFlag OUTLINE_FLAG;
+    public static IntegerFlag OUTLINE_WIDTH_FLAG;
     public static StringFlag DISPLAY_FLAG;
     public static DoubleFlag MAX_DISTANCE_FLAG;
     public static DoubleFlag MIN_DISTANCE_FLAG;
@@ -55,15 +56,17 @@ public class WorldGuardIntegration {
             StateFlag extrudeFlag = new StateFlag("bluemap-extrude", false);
             StringFlag colorFlag = new StringFlag("bluemap-color", Integer.toHexString(BlueBridgeUtils.colorToInt(BlueBridgeWGConfig.getInstance().defaultColor())));
             StringFlag outlineFlag = new StringFlag("bluemap-color-outline", Integer.toHexString(BlueBridgeUtils.colorToInt(BlueBridgeWGConfig.getInstance().defaultOutlineColor())).substring(2));
+            IntegerFlag outlineWidthFlag = new IntegerFlag("bluemap-outline-width");
             StringFlag displayFlag = new StringFlag("bluemap-display");
             DoubleFlag maxDistanceFlag = new DoubleFlag("bluemap-max-distance");
             DoubleFlag minDistanceFlag = new DoubleFlag("bluemap-min-distance");
-            flags.registerAll(Arrays.asList(new Flag[]{renderFlag, depthCheckFlag, heightFlag, extrudeFlag, colorFlag, outlineFlag, displayFlag, maxDistanceFlag, minDistanceFlag}));
+            flags.registerAll(Arrays.asList(new Flag[]{renderFlag, depthCheckFlag, heightFlag, extrudeFlag, colorFlag, outlineFlag, outlineWidthFlag, displayFlag, maxDistanceFlag, minDistanceFlag}));
             RENDER_FLAG = renderFlag;
             HEIGHT_FLAG = heightFlag;
             EXTRUDE_FLAG = extrudeFlag;
             COLOR_FLAG = colorFlag;
             OUTLINE_FLAG = outlineFlag;
+            OUTLINE_WIDTH_FLAG = outlineWidthFlag;
             DISPLAY_FLAG = displayFlag;
             DEPTH_CHECK_FLAG = depthCheckFlag;
             MAX_DISTANCE_FLAG = maxDistanceFlag;
@@ -88,7 +91,7 @@ public class WorldGuardIntegration {
 
         if (bukkitWorld == null) {
             BlueBridgeWG.getInstance().getLogger().warning("World " + worldUUID.toString() + " not found! Please check your Bluemap config for invalid worlds!");
-            return new ArrayList<RegionSnapshot>();
+            return new ArrayList<>();
         }
 
         World w = BukkitAdapter.adapt(bukkitWorld);
@@ -104,19 +107,25 @@ public class WorldGuardIntegration {
                 List<Vector2d> points = getPointsForRegion(pr);
                 //Convert color flags to Color Objects, if applicable
                 String color = pr.getFlag(COLOR_FLAG);
-                Color colorRGBA = null;
+                Color colorRGBA;
                 if (color != null && hexPatternRGBA.matcher(color).matches()) {
                     colorRGBA = new Color("#" + color);
                 } else {
                     colorRGBA = BlueBridgeWGConfig.getInstance().defaultColor();
                 }
                 String bordercolor = pr.getFlag(OUTLINE_FLAG);
-                Color colorRGB = null;
+                Color colorRGB;
                 if (bordercolor != null && hexPatternRGB.matcher(bordercolor).matches()) {
                     colorRGB = new Color("#" + bordercolor);
                 } else {
                     colorRGB = BlueBridgeWGConfig.getInstance().defaultOutlineColor();
                 }
+
+                int outlineWidth = pr.getFlag(OUTLINE_WIDTH_FLAG) != null ? pr.getFlag(OUTLINE_WIDTH_FLAG) : BlueBridgeWGConfig.getInstance().defaultOutlineWidth();
+                if (outlineWidth <= 0) {
+                    outlineWidth = BlueBridgeWGConfig.getInstance().defaultOutlineWidth();
+                }
+
                 StateFlag.State depthCheckVal = pr.getFlag(DEPTH_CHECK_FLAG);
                 boolean depthCheck = depthCheckVal != null ? depthCheckVal == StateFlag.State.ALLOW : BlueBridgeWGConfig.getInstance().defaultDepthCheck();
 
@@ -142,6 +151,7 @@ public class WorldGuardIntegration {
                         .setDepthCheck(depthCheck)
                         .setColor(colorRGBA)
                         .setBorderColor(colorRGB)
+                        .setOutlineWidth(outlineWidth)
                         .setMaxDistance(maxDistance)
                         .setMinDistance(minDistance)
                         .build();
